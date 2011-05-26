@@ -52,3 +52,12 @@
 [submodule "_vim/bundle/acp"]
 	path = _vim/bundle/acp
 	url = https://github.com/vim-scripts/AutoComplPop.git
+[submodule "_vim/bundle/repeat"]
+	path = _vim/bundle/repeat
+	url = https://github.com/tpope/vim-repeat.git
+[submodule "_vim/bundle/sparkup"]
+	path = _vim/bundle/sparkup
+	url = https://github.com/rstacruz/sparkup.git
+[submodule "_vim/bundle/nerdcommenter"]
+	path = _vim/bundle/nerdcommenter
+	url = https://github.com/scrooloose/nerdcommenter.git
