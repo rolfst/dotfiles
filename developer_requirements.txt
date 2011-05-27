@@ -1,0 +1,10 @@
+ipdb
+ipython
+pastescript
+nose
+Nosy
+coverage
+sphinx
+grin
+pyflakes
+pep8
