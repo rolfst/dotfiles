@@ -10,6 +10,7 @@ function link_file {
     ln -sf ${source} ${target}
 }
 
+BASE=`pwd`
 if [ "$1" = "vim" ]; then
     for i in _vim*
     do
@@ -32,3 +33,5 @@ git submodule foreach git submodule update
 # setup command-t
 cd _vim/bundle/command-t
 rake make
+
+python $BASE/setup_virtualenv.py
