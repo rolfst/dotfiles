@@ -109,5 +109,4 @@ export PROJECT_HOME=$HOME/projects/python
 export VIRTUALENVWRAPPER_BITBUCKET_USER=rolfst
 
 # Add git and svn branch names
-export PS1="$PS1\$(parse_git_branch)\$(parse_svn_branch) "
 export EDITOR=vim
