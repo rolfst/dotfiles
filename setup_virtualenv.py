@@ -6,7 +6,6 @@ postmkenv_text = """proj_name=$(echo $VIRTUAL_ENV|awk -F'/' '{print $NF}')
 mkdir $HOME/projects/python/$proj_name
 add2virtualenv $HOME/projects/python/$proj_name
 cd $HOME/projects/python/$proj_name
-base = os.getcwd()
 cp """+ base +"""/developer_requirements.txt $HOME/projects/python/$proj_name/"""
 
 postactivate_txt="""proj_name=$(echo $VIRTUAL_ENV|awk -F'/' '{print $NF}')
