@@ -33,5 +33,9 @@ git submodule foreach git submodule update
 # setup command-t
 cd _vim/bundle/command-t
 rake make
+
+export WORKON_HOME=~/.projects
 source /usr/local/bin/virtualenvwrapper.sh 
 python $BASE/setup_virtualenv.py
+source ~/bashrc
+
