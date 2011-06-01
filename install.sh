@@ -37,5 +37,5 @@ rake make
 export WORKON_HOME=~/.projects
 source /usr/local/bin/virtualenvwrapper.sh 
 python $BASE/setup_virtualenv.py
-source ~/bashrc
+source ~/.bashrc
 
