@@ -58,3 +58,6 @@
 [submodule "_vim/bundle/nerdcommenter"]
 	path = _vim/bundle/nerdcommenter
 	url = https://github.com/scrooloose/nerdcommenter.git
+[submodule "_vim/bundle/ragtag"]
+	path = _vim/bundle/ragtag
+	url = https://github.com/tpope/vim-ragtag.git

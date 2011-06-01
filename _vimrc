@@ -224,6 +224,7 @@ set hlsearch                " Highlight searches by default.
 set incsearch               " Incrementally search while typing a /regex
 
 """" Display
+set guifont="Consolas\ 11"
 colorscheme molokai
 
 " Quickly edit/reload the vimrc file
