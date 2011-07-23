@@ -61,3 +61,6 @@
 [submodule "_vim/bundle/ragtag"]
 	path = _vim/bundle/ragtag
 	url = https://github.com/tpope/vim-ragtag.git
+[submodule "_vim/bundle/zencoding"]
+	path = _vim/bundle/zencoding
+	url = https://github.com/mattn/zencoding-vim.git
