@@ -61,3 +61,15 @@
 [submodule "_vim/bundle/zencoding"]
 	path = _vim/bundle/zencoding
 	url = https://github.com/mattn/zencoding-vim.git
+[submodule "_vim/bundle/snipmate"]
+	path = _vim/bundle/snipmate
+	url = https://github.com/garbas/vim-snipmate.git
+[submodule "_vim/bundle/tlib"]
+	path = _vim/bundle/tlib
+	url = https://github.com/tomtom/tlib_vim.git
+[submodule "_vim/bundle/vim_addon-mw-utils"]
+	path = _vim/bundle/vim_addon-mw-utils
+	url = https://github.com/MarcWeber/vim-addon-mw-utils.git
+[submodule "_vim/bundle/snipmate-snippets"]
+	path = _vim/bundle/snipmate-snippets
+	url = https://github.com/honza/snipmate-snippets.git
