@@ -64,3 +64,6 @@
 [submodule "_vim/bundle/zencoding"]
 	path = _vim/bundle/zencoding
 	url = https://github.com/mattn/zencoding-vim.git
+[submodule "bundle/snipmate"]
+	path = bundle/snipmate
+	url = https://github.com/garbas/vim-snipmate.git
