@@ -81,6 +81,12 @@ set wildmenu                  " Menu completion in command mode on <Tab>
 set wildmode=full             " <Tab> cycles between all matching choices.
 set hid "Change buffer -without saving"
 
+" ==========================================================
+" Shortcuts
+" ==========================================================
+set nocompatible              " Don't be compatible with vi
+let mapleader=","             " change the leader to be a comma vs slash
+let g:mapleader=","             " change the leader to be a comma vs slash
 
 " don't bell or blink
 set noerrorbells
@@ -169,12 +175,6 @@ set smarttab                " Handle tabs more intelligently
 set hlsearch                " Highlight searches by default.
 set incsearch               " Incrementally search while typing a /regex
 
-" ==========================================================
-" Shortcuts
-" ==========================================================
-set nocompatible              " Don't be compatible with vi
-let mapleader=","             " change the leader to be a comma vs slash
-let g:mapleader=","             " change the leader to be a comma vs slash
 
 " Seriously, guys. It's not like :W is bound to anything anyway.
 command! W :w
@@ -183,8 +183,8 @@ command! W :w
 map <leader>td <Plug>TaskList
 " ,v brings up my .vimrc
 " ,V reloads it -- making all changes active (have to save first)
-map <leader>v :sp ~/.vimrc<CR><C-W>_
-map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
+"map <leader>v :sp ~/.vimrc<CR><C-W>_
+"map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
 " open/close the quickfix window
 nmap <leader>c :copen<CR>
@@ -306,11 +306,11 @@ autocmd FileType html,xhtml,xml,css setlocal expandtab shiftwidth=2 tabstop=2 so
 """"""""""""""""""""""""""""""
 let g:miniBufExplModSelTarget = 1
 let g:miniBufExplorerMoreThanOne = 2
-let g:miniBufExplModSelTarget = 0
+let g:miniBufExplModSelTarget = 1
 let g:miniBufExplUseSingleClick = 1
 let g:miniBufExplMapWindowNavVim = 1
-let g:miniBufExplVSplit = 25
-let g:miniBufExplSplitBelow=1
+let g:miniBufExplMapWindowNavArrow = 1
+let g:miniBufExplMapCTabSwitchBufs = 1
 
 let g:bufExplorerSortBy = "name"
 
@@ -437,3 +437,49 @@ au FileType css set omnifunc=csscomplete#CompleteCSS
 let Grep_Skip_Dirs = 'RCS CVS SCCS .svn .hg .git generated'
 set grepprg=/bin/grep\ -nH
 
+" """""""""""""""""""""""""""""""""""
+" Zencoding
+" """""""""""""""""""""""""""""""""""
+let g:user_zen_leader_key = '<c-y>'
+let g:use_zen_complete_tag = 1
+
+" """"""""""""""""""""""""""""""""""""
+" utility functions
+"  """""""""""""""""""""""""""""""""""
+" Use /pattern to search for something, then
+"   :call CopyMatchingLines()
+" to copy all lines containing hits (whole lines).
+" The pattern may extend over multiple lines.
+" The 'normal! $' attempts to avoid copying the same line more than once.
+" BUG: For some patterns, it could miss a second hit?
+function! CopyMatchingLines()
+  let posinit = getpos(".")
+  call cursor(1, 1)
+  let cnt = 0
+  let hits = []
+  let snum = search(@/, 'cW')
+  while snum > 0
+    let enum = search(@/, 'ceW')
+    call extend(hits, getline(snum, enum))
+    let cnt += 1
+    normal! $
+    let snum = search(@/, 'W')
+  endwhile
+  if cnt > 0
+    let @+ = join(hits, "\n") . "\n"
+  endif
+  call cursor(posinit[1], posinit[2])
+  echomsg cnt 'lines (or blocks) were appended to the clipboard.'
+endfunction
+
+" Use 0"+y0 to clear the clipboard, then
+"    :g/pattern/call CopyMultiMatches()
+" to copy all multiline hits (just the matching text).
+" This is for when the match extends over multiple lines.
+" Only the first match from each line is found.
+" BUG: When searching for "^function.*\_s*let" the '.*' stops at the end
+" of a line, but it greedily skips "\n" in the following (we copy too much).
+function! CopyMultiMatches()
+  let text = join(getline(".", "$"), "\n") . "\n"
+  let @+ .= matchstr(text, @/) . "\n"
+endfunction

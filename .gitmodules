@@ -73,3 +73,6 @@
 [submodule "_vim/bundle/snipmate-snippets"]
 	path = _vim/bundle/snipmate-snippets
 	url = https://github.com/honza/snipmate-snippets.git
+[submodule "_vim/bundle/chapa"]
+	path = _vim/bundle/chapa
+	url = https://github.com/alfredodeza/chapa.vim.git

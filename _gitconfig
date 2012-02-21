@@ -11,3 +11,6 @@
     default = matching
 [core]
     editor = vim
+[giggle]
+	main-window-maximized = false
+	main-window-geometry = 876x445+1+53
