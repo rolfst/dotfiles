@@ -86,8 +86,8 @@ set hid "Change buffer -without saving"
 " Shortcuts
 " ==========================================================
 set nocompatible              " Don't be compatible with vi
-let mapleader=","             " change the leader to be a comma vs slash
-let g:mapleader=","             " change the leader to be a comma vs slash
+"let mapleader=","             " change the leader to be a comma vs slash
+"let g:mapleader=","             " change the leader to be a comma vs slash
 
 " don't bell or blink
 set noerrorbells

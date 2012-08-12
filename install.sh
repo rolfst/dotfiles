@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 function link_file {
     source="${PWD}/$1"
     target="${HOME}/${1/_/.}"
