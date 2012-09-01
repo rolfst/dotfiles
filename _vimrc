@@ -228,9 +228,9 @@ if MySys() == "mac"
 elseif MySys() == "windows"
   set gfn=Consolas\ 11
 elseif MySys() == "linux"
-"  set gfn=Inconsolata\ 11
+  set gfn=Inconsolata\ 11
   set shell=/bin/bash
-  colorscheme molokai
+  colorscheme ron
 endif
 
 " Quickly edit/reload the vimrc file

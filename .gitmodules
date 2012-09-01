@@ -88,3 +88,6 @@
 [submodule "_vim/bundle/vdebug"]
 	path = _vim/bundle/vdebug
 	url = https://github.com/joonty/vdebug.git
+[submodule "_vim/bundle/vcscommand"]
+	path = _vim/bundle/vcscommand
+	url = http://repo.or.cz/r/vcscommand.git
