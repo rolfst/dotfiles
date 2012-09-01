@@ -293,7 +293,7 @@ endfunction
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Do :help cope if you are unsure what cope is. It's super useful!
 map <leader>cc :botright cope<cr>
-map <leader>n :cn<cr>
+map <leader>cp :cn<cr>
 map <leader>p :cp<cr>
 " ===========================================================
 " FileType specific changes

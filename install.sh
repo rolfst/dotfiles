@@ -35,6 +35,7 @@ cd _vim/bundle/command-t
 rake make
 
 export WORKON_HOME=~/.projects
+export PROJECT_HOME=$HOME/projects/python
 source /usr/local/bin/virtualenvwrapper.sh 
 python $BASE/setup_virtualenv.py
 source ~/.bashrc
