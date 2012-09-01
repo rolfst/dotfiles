@@ -82,3 +82,6 @@
 [submodule "_vim/bundle/python-mode"]
 	path = _vim/bundle/python-mode
 	url = https://github.com/klen/python-mode.git
+[submodule "_vim/bundle/tagbar"]
+	path = _vim/bundle/tagbar
+	url = http://github.com/majutsushi/tagbar

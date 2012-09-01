@@ -228,7 +228,7 @@ if MySys() == "mac"
 elseif MySys() == "windows"
   set gfn=Consolas\ 11
 elseif MySys() == "linux"
-  set gfn=Consolas\ 11
+  set gfn=Inconsolata\ 11
   set shell=/bin/bash
   colorscheme molokai
 endif
