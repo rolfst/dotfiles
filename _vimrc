@@ -20,8 +20,6 @@
 " Pytest
 "     Runs your Python tests in Vim.
 "
-" Commant-T
-"     Allows easy search and opening of files within a given path
 "
 " Snipmate
 "     Configurable snippets to avoid re-typing common comands
@@ -48,11 +46,7 @@
 " Py.test
 "    Run py.test test's from within vim
 "
-" MakeGreen
-"    Generic test runner that works with nose
-"
-" Zencoding
-"   Speeds up html development
+" Vundle
 "
 " ==========================================================
 " Pathogen - Allows us to organize our vim plugins
@@ -62,21 +56,42 @@ filetype off
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+Bundle 'gmarik/vundle'
+
+" my Bundles here:
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'tacahiroy/ctrlp-funky'
+Bundle 'Lokaltog/powerline'
+Bundle "MarcWeber/vim-addon-mw-utils"
+Bundle "tomtom/tlib_vim"
+Bundle "garbas/vim-snipmate"
+Bundle 'terryma/vim-multiple-cursors'
+
 fun! MySys()
   return "linux"
 endfunction
 
+set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
+set encoding=utf-8
+"let g:Powerline_symbols="fancy"
 " ==========================================================
 " Basic Settings
 " ==========================================================
+" allows local vimrc
+set exrc
+
+
 set history=700
 syntax on                     " syntax highlighing
 filetype on                   " try to detect filetypes
-filetype plugin on     " enable loading plugin file for filetype
+filetype plugin indent on     " enable loading plugin file for filetype
 filetype indent on     " enable loading indent file for filetype
 set number                    " Display line numbers
 set numberwidth=1             " using only 1 column (and 1 space) while possible
-set background=dark           " We are using dark background in vim
+set background=light           " We are using dark background in vim
 set title                     " show title in console title bar
 set wildmenu                  " Menu completion in command mode on <Tab>
 set wildmode=full             " <Tab> cycles between all matching choices.
@@ -215,6 +230,10 @@ nmap <leader>a <Esc>:Ack!
 " Load the Gundo window
 map <leader>g :GundoToggle<CR>
 
+" Multiple cursor
+" Default mapping
+let g:multi_cursor_next_key='<C-i>'
+let g:multi_cursor_prev_key='<C-y>'
 """" Display
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors and Fonts
@@ -228,9 +247,9 @@ if MySys() == "mac"
 elseif MySys() == "windows"
   set gfn=Consolas\ 11
 elseif MySys() == "linux"
-  set gfn=Inconsolata\ 11
+  set gfn=Inconsolata\ 12
   set shell=/bin/bash
-  colorscheme ron
+  colorscheme solarized
 endif
 
 " Quickly edit/reload the vimrc file
@@ -248,6 +267,8 @@ nnoremap <leader>S :%s/\s\+$//<cr>:let @/=''<CR>
 
 " Select the item in the list with enter
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+nnoremap <c-\> :CtrlP<CR>
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
@@ -633,3 +654,4 @@ function! CopyMultiMatches()
   let text = join(getline(".", "$"), "\n") . "\n"
   let @+ .= matchstr(text, @/) . "\n"
 endfunction
+set secure

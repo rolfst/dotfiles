@@ -31,8 +31,8 @@ git submodule foreach git submodule init
 git submodule foreach git submodule update
 
 # setup command-t
-cd _vim/bundle/command-t
-rake make
+#cd _vim/bundle/command-t
+#rake make
 
 #export WORKON_HOME=~/.projects
 #export PROJECT_HOME=$HOME/projects/python
