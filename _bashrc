@@ -117,3 +117,5 @@ export VIRTUALENVWRAPPER_BITBUCKET_USER=rolfst
 # Add git and svn branch names
 export EDITOR=vim
 source ~/.autoenv/activate.sh
+
+export PATH=$PATH:$HOME/lib/PythonRemoteDebugging

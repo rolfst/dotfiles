@@ -62,13 +62,27 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 " my Bundles here:
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'tacahiroy/ctrlp-funky'
+
 Bundle 'Lokaltog/powerline'
-Bundle "MarcWeber/vim-addon-mw-utils"
-Bundle "tomtom/tlib_vim"
-Bundle "garbas/vim-snipmate"
+Bundle 'MarcWeber/vim-addon-mw-utils'
+Bundle 'Valloric/YouCompleteMe'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'christoomey/vim-tmux-navigator'
+Bundle 'garbas/vim-snipmate'
+Bundle 'joonty/vdebug'
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'marijnh/tern_for_vim'
+Bundle 'mattboehm/vim-unstack'
+Bundle 'mattn/emmet-vim'
+Bundle 'nathanaelkane/vim-indent-guides'
+Bundle 'pangloss/vim-javascript'
+Bundle 'rking/ag.vim'
+Bundle 'scrooloose/syntastic'
+Bundle 'tacahiroy/ctrlp-funky'
 Bundle 'terryma/vim-multiple-cursors'
+Bundle 'tomtom/tcomment_vim'
+Bundle 'tomtom/tlib_vim'
+Bundle 'tpope/vim-surround'
 
 fun! MySys()
   return "linux"
@@ -181,7 +195,7 @@ set modeline                " Allow vim options to be embedded in files;
 set modelines=5             " they must be within the first or last 5 lines.
 set ffs=unix,dos,mac        " Try recognizing dos, unix, and mac line endings.
 " displays tabs with :set list & displays when a line runs off-screen
-set listchars=tab:>-,eol:$,trail:-,precedes:<,extends:>
+set listchars=tab:>-,trail:-,precedes:<,extends:>
 set list
 
 """ Searching and Patterns
@@ -215,15 +229,24 @@ map <c-k> <c-w>k
 map <c-l> <c-w>l
 map <c-h> <c-w>h
 
+noremap <A-j> :m+<CR>
+noremap <A-k> :m-2<CR>
+inoremap <A-j> <Esc>:m+<CR>
+inoremap <A-k> <Esc>:m-2<CR>
+vnoremap <A-j> :m'>+<CR>gv
+vnoremap <A-k> :m-2<CR>gv
+imap { {}<left>
+imap [ []<left>
+imap ( ()<left>
 " and lets make these all work in insert mode too ( <C-O> makes next cmd
 "  happen as if in command mode )
 imap <C-W> <C-O><C-W>
 
 " Open NerdTree
 map <leader>n :NERDTreeToggle<CR>
-
+let NERDTreeIgnore=['CVS', 'installed']
 " Run command-t file search
-map <leader>f :CommandT<CR>
+map <leader>f :NERDTreeFind<CR>
 " Ack searching
 nmap <leader>a <Esc>:Ack!
 
@@ -233,12 +256,18 @@ map <leader>g :GundoToggle<CR>
 " Multiple cursor
 " Default mapping
 let g:multi_cursor_next_key='<C-i>'
-let g:multi_cursor_prev_key='<C-y>'
+
 """" Display
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 syntax enable "Enable syntax hl
+if &term =~ '256color'
+    " Disable background color Erase (BCE) so that color schemes 
+    " work properly when Vim is used inside tmux and GNU screen
+    "See also http://snk.tuxfamily.org/log/vim-256color-bce.html
+    set t_ut=
+endif
 
 " Set font according to system
 if MySys() == "mac"
@@ -249,6 +278,12 @@ elseif MySys() == "windows"
 elseif MySys() == "linux"
   set gfn=Inconsolata\ 12
   set shell=/bin/bash
+  let g:solarized_termtrans=1
+  let g:solarized_degrade=0
+  let g:solarized_bold=0
+  let g:solarized_underline=0
+  let g:solarized_italic=0
+  let g:solarized_visibility="normal"
   colorscheme solarized
 endif
 
@@ -611,8 +646,8 @@ set grepprg=/bin/grep\ -nH
 " """""""""""""""""""""""""""""""""""
 " Zencoding
 " """""""""""""""""""""""""""""""""""
-let g:user_zen_leader_key = '<c-y>'
-let g:use_zen_complete_tag = 1
+let g:user_emmet_leader_key = '<c-y>'
+let g:use_emmet_complete_tag = 1
 
 " """"""""""""""""""""""""""""""""""""
 " utility functions
