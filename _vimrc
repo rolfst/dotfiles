@@ -264,6 +264,7 @@ map <leader>n :NERDTreeToggle<CR>
 let NERDTreeIgnore=['CVS', 'installed']
 " Run command-t file search
 map <leader>f :NERDTreeFind<CR>
+
 " Ack searching
 nmap <leader>a <Esc>:Ack!
 
@@ -321,6 +322,23 @@ nnoremap <leader>S :%s/\s\+$//<cr>:let @/=''<CR>
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 nnoremap <c-\> :CtrlP<CR>
+let g:ctrlp_extensions = ['funky']
+nnoremap <Leader>fu :CtrlPFunky<Cr>
+" narrow the list down with a word under cursor
+" nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/](\.(git|hg|svn)$|(install|CPAN)$)',
+    \ 'file': '\v\.(exe|so|dll)$',
+    \ }
+
+
+" allows opening a split from ctrlp with <c-i>, since using 'i' from NERDTree
+" is how to open a horizontal split there. Keep em the same.
+let g:ctrlp_prompt_mappings = {
+  \ 'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>', '<c-i>']
+  \ }
+
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
