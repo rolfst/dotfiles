@@ -64,12 +64,11 @@ Bundle 'gmarik/vundle'
 " my Bundles here:
 
 Bundle 'Lokaltog/powerline'
+Bundle 'SirVer/ultisnips'
 Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'christoomey/vim-tmux-navigator'
-Bundle 'garbas/vim-snipmate'
-Bundle 'honza/vim-snippets'
 Bundle 'joonty/vdebug'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'marijnh/tern_for_vim'
@@ -411,16 +410,10 @@ autocmd BufRead,BufNew :call UMiniBufExplorer
 map <leader>u :TMiniBufExplorer<cr>
 
 """"""""""""""""""""""""""""""""""""""
-" Snipmate
+" Ultisnips
 """"""""""""""""""""""""""""""""""""""
-" Don't allow snipmate to take over tab
-autocmd VimEnter * ino <c-j> <c-r>=TriggerSnippet()<cr>
-" Use tab to scroll through autocomplete menus
-autocmd VimEnter * imap <expr> <Tab> pumvisible() ? "<C-N>" : "<Tab>"
-autocmd VimEnter * imap <expr> <S-Tab> pumvisible() ? "<C-P>" : "<S-Tab>"
-snor <c-j> <esc>i<right><c-r>=TriggerSnippet()<cr>
-let g:acp_completeoptPreview=1
-
+let g:always_use_first_snippet=1
+let g:UltiSnipsJumpForwardTrigger='<C-m>'
 
 
 """"""""""""""""""""""""""""""
