@@ -123,6 +123,7 @@ let g:mapleader=","             " change the leader to be a comma vs slash
     \ }
     NeoBundleLazy 'cakebaker/scss-syntax.vim', {'autoload':{'filetypes':['scss','sass']}}
     NeoBundleLazy 'hail2u/vim-css3-syntax', {'autoload':{'filetypes':['css','scss','sass']}}
+    NeoBundleLazy 'hail2u/vim-css3-syntax', {'autoload':{'filetypes':['css','scss','sass']}}
     NeoBundleLazy 'ap/vim-css-color', {'autoload':{'filetypes':['css','scss','sass','less','styl']}}
     NeoBundleLazy 'othree/html5.vim', {'autoload':{'filetypes':['html']}}
     NeoBundleLazy 'wavded/vim-stylus', {'autoload':{'filetypes':['styl']}}
@@ -227,6 +228,19 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       nnoremap [ctrlp]l :CtrlPLine<cr>
       nnoremap [ctrlp]o :CtrlPFunky<cr>
       nnoremap [ctrlp]b :CtrlPBuffer<cr>
+
+    let g:ctrlp_custom_ignore = {
+        \ 'dir':  '\v[\/](\.(git|hg|svn)$|(install|CPAN)$)',
+        \ 'file': '\v\.(exe|so|dll)$',
+        \ }
+
+
+    " allows opening a split from ctrlp with <c-i>, since using 'i' from NERDTree
+    " is how to open a horizontal split there. Keep em the same.
+    let g:ctrlp_prompt_mappings = {
+        \ 'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>', '<c-i>']
+        \ }
+
     "}}}
     NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
       let NERDTreeShowHidden=1
@@ -418,7 +432,23 @@ set report=0                " : commands always print changed line count.
 set shortmess+=a            " Use [+]/[RO]/[w] for modified/readonly/written.
 set ruler                   " Show some info, even without statuslines.
 set laststatus=2            " Always show statusline, even if only 1 window.
-set statusline=[%l,%v\ %P%M]\ %f\ %r%h%w\ (%{&ff})\ %{fugitive#statusline()}
+"set statusline=[%l,%v\ %P%M]\ %f\ %r%h%w\ (%{&ff})\ %{fugitive#statusline()}
+set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
+    "              | | | | |  |   |      |  |     |    |
+    "              | | | | |  |   |      |  |     |    + current
+    "              | | | | |  |   |      |  |     |       column
+    "              | | | | |  |   |      |  |     +-- current line
+    "              | | | | |  |   |      |  +-- current % into file
+    "              | | | | |  |   |      +-- current syntax in
+    "              | | | | |  |   |          square brackets
+    "              | | | | |  |   +-- current fileformat
+    "              | | | | |  +-- number of lines
+    "              | | | | +-- preview flag in square brackets
+    "              | | | +-- help flag in square brackets
+    "              | | +-- readonly flag in square brackets
+    "              | +-- modified flag in square brackets
+    "              +-- full path to file in the buffer
+
 
 
 " Ignore these files when completing
@@ -563,131 +593,62 @@ nnoremap <leader>q :q<CR>
 " hide matches on <leader>space
 nnoremap <leader><space> :nohlsearch<cr>
 
-let g:pymode_syntax = 1
+" Remove trailing whitespace on <leader>S
+nnoremap <leader>S :%s/\s\+$//<cr>:let @/=''<CR>
 
-" Enable all python highlightings
-let g:pymode_syntax_all = 1
+" Select the item in the list with enter
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-" Highlight "print" as function
-let g:pymode_syntax_print_as_function = 0
 
-" Highlight indentation errors
-let g:pymode_syntax_indent_errors = g:pymode_syntax_all
-
-" Highlight trailing spaces
-let g:pymode_syntax_space_errors = g:pymode_syntax_all
-
-" Highlight string formatting
-let g:pymode_syntax_string_formatting = g:pymode_syntax_all
-
-" Highlight str.format syntax
-let g:pymode_syntax_string_format = g:pymode_syntax_all
-
-" Highlight string.Template syntax
-let g:pymode_syntax_string_templates = g:pymode_syntax_all
-
-" Highlight doc-tests
-let g:pymode_syntax_doctests = g:pymode_syntax_all
-
-" Highlight builtin objects (__doc__, self, etc)
-let g:pymode_syntax_builtin_objs = g:pymode_syntax_all
-
-" Highlight builtin functions
-let g:pymode_syntax_builtin_funcs = g:pymode_syntax_all
-
-" Highlight exceptions
-let g:pymode_syntax_highlight_exceptions = g:pymode_syntax_all
-
-" For fast machines
-let g:pymode_syntax_slow_sync = 0
 
 """"""""""""""""""""""""""""""
-" => JavaScript section
-"""""""""""""""""""""""""""""""
-au FileType javascript call JavaScriptFold()
-au FileType javascript setl fen
-au FileType javascript setl nocindent
-
-
-au BufRead *.js set makeprg=jslint\ %
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-
-
-function! JavaScriptFold()
-    setl foldmethod=syntax
-    setl foldlevelstart=1
-    syn region foldBraces start=/{/ end=/}/ transparent fold keepend extend
-
-    function! FoldText()
-    return substitute(getline(v:foldstart), '{.*', '{...}', '')
-    endfunction
-    setl foldtext=FoldText()
-endfunction
-
-" Run pep8
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""
-" other omni complete functions
-"""""""""""""""""""""""""""""""""""""""""""""""""""""
-au FileType css set omnifunc=csscomplete#CompleteCSS
-
+" => Visual mode related
 """"""""""""""""""""""""""""""
-" => Vim grep
-""""""""""""""""""""""""""""""
-let Grep_Skip_Dirs = 'RCS CVS SCCS .svn .hg .git generated'
-set grepprg=/bin/grep\ -nH
+" Really useful!
+"  In visual mode when you press * or # to search for the current selection
+vnoremap <silent> * :call VisualSearch('f')<CR>
+vnoremap <silent> # :call VisualSearch('b')<CR>
 
-" """""""""""""""""""""""""""""""""""
-" Zencoding
-" """""""""""""""""""""""""""""""""""
-let g:user_emmet_leader_key = '<c-y>'
-let g:use_emmet_complete_tag = 1
+" When you press gv you vimgrep after the selected text
+vnoremap <silent> gv :call VisualSearch('gv')<CR>
+map <leader>g :vimgrep // **/*.<left><left><left><left><left><left><left>
 
-" """"""""""""""""""""""""""""""""""""
-" utility functions
-"  """""""""""""""""""""""""""""""""""
-" Use /pattern to search for something, then
-"   :call CopyMatchingLines()
-" to copy all lines containing hits (whole lines).
-" The pattern may extend over multiple lines.
-" The 'normal! $' attempts to avoid copying the same line more than once.
-" BUG: For some patterns, it could miss a second hit?
-function! CopyMatchingLines()
-  let posinit = getpos(".")
-  call cursor(1, 1)
-  let cnt = 0
-  let hits = []
-  let snum = search(@/, 'cW')
-  while snum > 0
-    let enum = search(@/, 'ceW')
-    call extend(hits, getline(snum, enum))
-    let cnt += 1
-    normal! $
-    let snum = search(@/, 'W')
-  endwhile
-  if cnt > 0
-    let @+ = join(hits, "\n") . "\n"
-  endif
-  call cursor(posinit[1], posinit[2])
-  echomsg cnt 'lines (or blocks) were appended to the clipboard.'
+
+function! CmdLine(str)
+    exe "menu Foo.Bar :" . a:str
+    emenu Foo.Bar
+    unmenu Foo
 endfunction
 
-" Use 0"+y0 to clear the clipboard, then
-"    :g/pattern/call CopyMultiMatches()
-" to copy all multiline hits (just the matching text).
-" This is for when the match extends over multiple lines.
-" Only the first match from each line is found.
-" BUG: When searching for "^function.*\_s*let" the '.*' stops at the end
-" of a line, but it greedily skips "\n" in the following (we copy too much).
-function! CopyMultiMatches()
-  let text = join(getline(".", "$"), "\n") . "\n"
-  let @+ .= matchstr(text, @/) . "\n"
-endfunction
-function! VisualSelection(direction) range
+" From an idea by Michael Naumann
+function! VisualSearch(direction) range
     let l:saved_reg = @"
     execute "normal! vgvy"
 
     let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+    elseif a:direction == 'gv'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
+    elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Cope
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Do :help cope if you are unsure what cope is. It's super useful!
+map <leader>cc :botright cope<cr>
+map <leader>cp :cn<cr>
+map <leader>p :cp<cr>
+" ===========================================================
+" FileType specific changes
     let l:pattern = substitute(l:pattern, "\n$", "", "")
 
     if a:direction == 'b'
