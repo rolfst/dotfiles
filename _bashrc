@@ -118,4 +118,4 @@ export VIRTUALENVWRAPPER_BITBUCKET_USER=rolfst
 export EDITOR=vim
 source ~/.autoenv/activate.sh
 
-export PATH=$PATH:$HOME/lib/PythonRemoteDebugging
+export PATH=$PATH:$HOME/bin:$HOME/lib/PythonRemoteDebugging

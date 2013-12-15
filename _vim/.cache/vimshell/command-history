@@ -1,0 +1,8 @@
+brunch new gh:rolfst/angular-brunch-seed-with-coffee client
+brunch new gh:rolfst/angular-brunch-seed-with-coffee .
+ls
+pwd
+:q
+brunch new gh:rolfst/angular-brunch-seed-with-coffee
+brunch
+dir

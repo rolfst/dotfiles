@@ -1,0 +1,39 @@
+#! /bin/bash 
+read -p "project: " proj
+echo $proj
+tmux has-session -t $proj
+if [ $? != 0 ]
+    then
+    tmux -2 new -s $proj -d
+
+    tmux neww -t $proj:1 -n 'editor'
+    tmux send-keys -t $proj "cd ~/projects/web/$proj/" C-m
+    tmux send-keys -t $proj "export WORKON_HOME=/home/rolf/projects/web" C-m
+    tmux send-keys -t $proj "source /usr/local/bin/virtualenvwrapper.sh" C-m
+    tmux send-keys -t $proj "workon $proj" C-m
+
+    tmux neww -t $proj:2 -n 'tests'
+    tmux send-keys -t $proj:2 "cd ~/projects/web/$proj/" C-m
+    tmux send-keys -t $proj:2 "export WORKON_HOME=/home/rolf/projects/web" C-m
+    tmux send-keys -t $proj:2 "source /usr/local/bin/virtualenvwrapper.sh" C-m
+    tmux send-keys -t $proj:2 "workon $proj" C-m
+    tmux send-keys -t $proj:2 "clear" C-m
+
+    tmux neww -t $proj:3 -n 'server'
+    tmux send-keys -t $proj:3 "cd ~/projects/web/$proj/" C-m
+    tmux send-keys -t $proj:3 "export WORKON_HOME=/home/rolf/projects/web" C-m
+    tmux send-keys -t $proj:3 "source /usr/local/bin/virtualenvwrapper.sh" C-m
+    tmux send-keys -t $proj:3 "workon $proj" C-m
+    tmux send-keys -t $proj:3 "clear" C-m
+
+    tmux neww -t $proj:4 -n 'shell'
+    tmux send-keys -t $proj:4 "cd ~/projects/web/$proj/" C-m
+    tmux send-keys -t $proj:4 "export WORKON_HOME=/home/rolf/projects/web" C-m
+    tmux send-keys -t $proj:4 "source /usr/local/bin/virtualenvwrapper.sh" C-m
+    tmux send-keys -t $proj:4 "workon $proj" C-m
+    tmux send-keys -t $proj:4 "clear" C-m
+
+    tmux select-window -t $proj:1
+    tmux send-keys -t $proj:1 "vim" C-m
+fi
+tmux attach -t $proj
