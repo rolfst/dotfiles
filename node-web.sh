@@ -1,6 +1,6 @@
 #! /bin/bash
 ############################################################################
-# this script depends on an installed virtualenvwrapper it maked use of 
+# this script depends on an installed virtualenvwrapper it makes use of 
 # a virtualenv (python) to create an isolated node.js environment
 ############################################################################
 echo -n "workon home dir " dir
