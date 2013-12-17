@@ -121,7 +121,10 @@ let g:mapleader=","             " change the leader to be a comma vs slash
         \ 'windows': '"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\nmake.exe" make_msvc32.mak',
       \ },
     \ }
-    NeoBundleLazy 'cakebaker/scss-syntax.vim', {'autoload':{'filetypes':['scss','sass']}}
+    NeoBundleLazy 'cakebaker/scss-syntax.vim', {'autoload':{'filetypes':['scss','sass']}} "{{{
+        autocmd FileType css,scss setlocal foldmethod=marker foldmarker={,}
+        autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
+    "}}}
     NeoBundleLazy 'hail2u/vim-css3-syntax', {'autoload':{'filetypes':['css','scss','sass']}}
     NeoBundleLazy 'hail2u/vim-css3-syntax', {'autoload':{'filetypes':['css','scss','sass']}}
     NeoBundleLazy 'ap/vim-css-color', {'autoload':{'filetypes':['css','scss','sass','less','styl']}}
@@ -149,7 +152,9 @@ let g:mapleader=","             " change the leader to be a comma vs slash
     \ }
     NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
     NeoBundleLazy 'maksimr/vim-jsbeautify', {'autoload':{'filetypes':['javascript']}} "{{{
-    nnoremap <leader>fjs :call JsBeautify()<cr>
+        nnoremap <leader>fjs :call JsBeautify()<cr>
+        autocmd FileType js,scss,css autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+    "}}}
 
     NeoBundleLazy 'kchmck/vim-coffee-script', {'autoload':{'filetypes':['coffee']}}
     NeoBundleLazy 'mmalecki/vim-node.js', {'autoload':{'filetypes':['javascript']}}
@@ -157,8 +162,14 @@ let g:mapleader=","             " change the leader to be a comma vs slash
     NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {'autoload':{'filetypes':['javascript','coffee','ls']}}
     NeoBundleLazy 'klen/python-mode', {'autoload':{'filetypes':['python']}} "{{{
       let g:pymode_rope=0
+        autocmd FileType python setlocal foldmethod=indent
     "}}}
-    "
+    NeoBundleLazy 'davidhalter/jedi-vim', {'autoload':{'filetypes':['python']}} "{{{
+      let g:jedi#popup_on_dot=0
+    "}}}
+
+    NeoBundle 'alfredodeza/pytest.vim'
+
     if executable('hg')
       NeoBundle 'bitbucket:ludovicchabant/vim-lawrencium'
     endif
@@ -175,32 +186,36 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       autocmd FileType gitcommit nmap <buffer> U :Git checkout -- <C-r><C-g><CR>
       autocmd BufReadPost fugitive://* set bufhidden=delete
     "}}}
+    
+    NeoBundle 'vim-scripts/vcscommand.vim' "{{{
+        nnoremap <leader>sa :VCSAdd
+        nnoremap <leader>sc :VCSCommit
+    "}}}
+
     NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'], 'autoload':{'commands':'Gitv'}} "{{{
       nnoremap <silent> <leader>gv :Gitv<CR>
       nnoremap <silent> <leader>gV :Gitv!<CR>
     "}}}
     NeoBundle 'honza/vim-snippets'
 
-    if s:settings.autocomplete_method == 'ycm' "{{{
-      NeoBundle 'Valloric/YouCompleteMe', {'vim_version':'7.3.584'} "{{{
+    NeoBundle 'Valloric/YouCompleteMe', {'vim_version':'7.3.584'} "{{{
         let g:ycm_complete_in_comments_and_strings=1
         let g:ycm_key_list_select_completion=['<C-n>', '<Down>']
         let g:ycm_key_list_previous_completion=['<C-p>', '<Up>']
         let g:ycm_filetype_blacklist={'unite': 1}
-      "}}}
-      NeoBundle 'SirVer/ultisnips' "{{{
+    "}}}
+    NeoBundle 'SirVer/ultisnips' "{{{
         let g:UltiSnipsExpandTrigger="<tab>"
         let g:UltiSnipsJumpForwardTrigger="<tab>"
         let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
         let g:UltiSnipsSnippetsDir='~/.vim/snippets'
-      "}}}
-    endif "}}}
+    "}}}
     NeoBundle 'mileszs/ack.vim' "{{{
       if executable('ag')
         let g:ackprg = "ag --nogroup --column --smart-case --follow"
       endif
     "}}}
-    
+
     NeoBundleLazy 'mbbill/undotree', {'autoload':{'commands':'UndotreeToggle'}} "{{{
       let g:undotree_SplitLocation='botright'
       let g:undotree_SetFocusWhenToggle=1
@@ -352,7 +367,10 @@ let g:mapleader=","             " change the leader to be a comma vs slash
     NeoBundle 'fholgado/minibufexpl.vim' "{{{
     "}}}
 
-    NeoBundle 'Lokaltog/powerline'
+    NeoBundle 'Lokaltog/powerline' "{{{
+        set runtimepath+=~/.vim/bundle/powerline/powerline/bindings/vim
+        set encoding=utf-8
+    "}}}
     NeoBundle 'MarcWeber/vim-addon-mw-utils'
     NeoBundle 'altercation/vim-colors-solarized' "{{{
         set gfn=Inconsolata\ 12
@@ -374,10 +392,13 @@ let g:mapleader=","             " change the leader to be a comma vs slash
     NeoBundle 'tomtom/tlib_vim'
     NeoBundle 'tpope/vim-surround'
 
+    NeoBundleDepends 'kana/vim-textobj-user'
+    NeoBundle 'kana/vim-textobj-indent'
+    NeoBundle 'kana/vim-textobj-entire'
+    NeoBundle 'lucapette/vim-textobj-underscore'
+
     nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
 
-set runtimepath+=~/.vim/bundle/powerline/powerline/bindings/vim
-set encoding=utf-8
 
 let g:Powerline_symbols="fancy"
 " ==========================================================
@@ -389,8 +410,6 @@ set exrc
 " Shortcuts
 " ==========================================================
 set nocompatible              " Don't be compatible with vim
-set encoding=utf-8
-
 
 set history=700
 syntax on                     " syntax highlighing
@@ -519,6 +538,7 @@ set smarttab                " Handle tabs more intelligently
 set hlsearch                " Highlight searches by default.
 set incsearch               " Incrementally search while typing a /regex
 
+command! C let @/=""
 
 " Seriously, guys. It's not like :W is bound to anything anyway.
 command! W :w
@@ -550,6 +570,8 @@ vnoremap <A-k> :m-2<CR>gv
 imap { {}<left>
 imap [ []<left>
 imap ( ()<left>
+vnoremap > ><CR>gv
+vnoremap < <<CR>gv
 " and lets make these all work in insert mode too ( <C-O> makes next cmd
 "  happen as if in command mode )
 imap <C-W> <C-O><C-W>
@@ -644,24 +666,9 @@ endfunction
 " => Cope
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Do :help cope if you are unsure what cope is. It's super useful!
-map <leader>cc :botright cope<cr>
-map <leader>cp :cn<cr>
-map <leader>p :cp<cr>
+    map <leader>cc :botright cope<cr>
+    map <leader>cp :cn<cr>
+    map <leader>p :cp<cr>
 " ===========================================================
-" FileType specific changes
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
-
-    if a:direction == 'b'
-        execute "normal ?" . l:pattern . "^M"
-    elseif a:direction == 'gv'
-        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
-    elseif a:direction == 'replace'
-        call CmdLine("%s" . '/'. l:pattern . '/')
-    elseif a:direction == 'f'
-        execute "normal /" . l:pattern . "^M"
-    endif
-
-    let @/ = l:pattern
-    let @" = l:saved_reg
-endfunction
 set secure
+NeoBundleCheck
