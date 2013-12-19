@@ -1,3 +1,4 @@
+komodo-python-dbgp
 ipdb
 ipython
 pastescript
