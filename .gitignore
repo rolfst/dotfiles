@@ -5,3 +5,4 @@ _vim/ropevim/src*
 _vim/ropevim/pylibs*
 _vim/bundle/*
 *.swp
+_vim/.cache/*
