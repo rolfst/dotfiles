@@ -7,7 +7,7 @@ function link_file {
         mv $target $target.bak
     fi
 
-    copy ${source} ${target}
+    cp ${source} ${target}
 }
 
 BASE=`pwd`

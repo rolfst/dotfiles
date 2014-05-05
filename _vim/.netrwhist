@@ -1,3 +1,9 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =1
+let g:netrw_dirhist_cnt =7
 let g:netrw_dirhist_1='/home/rolf/dotfiles/_vim/bundle/vcscommand'
+let g:netrw_dirhist_2='/home/rolfs'
+let g:netrw_dirhist_3='/home/rolfs/.VirtualBox'
+let g:netrw_dirhist_4='/home/rolfs'
+let g:netrw_dirhist_5='/home'
+let g:netrw_dirhist_6='/'
+let g:netrw_dirhist_7='/home/rolfs'
