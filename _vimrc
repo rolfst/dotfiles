@@ -257,7 +257,7 @@ let g:mapleader=","             " change the leader to be a comma vs slash
         \ }
 
     "}}}
-    NeoBundleLazy 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
+    NeoBundle 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
       let NERDTreeShowHidden=1
       let NERDTreeQuitOnOpen=0
       let NERDTreeShowLineNumbers=1
@@ -265,8 +265,12 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       let NERDTreeShowBookmarks=1
       let NERDTreeIgnore=['\.git','\.hg', 'CVS']
       let NERDTreeBookmarksFile='~/.vim/.cache/NERDTreeBookmarks'
+      let NERDTreeHijackNetrw=1
       nnoremap <leader>n :NERDTreeToggle<CR>
       nnoremap <leader>f :NERDTreeFind<CR>
+    "}}}
+    
+    NeoBundle 'tpope/vim-vinegar' "{{{
     "}}}
     NeoBundle 'Shougo/unite.vim' "{{{
       let bundle = neobundle#get('unite.vim')
@@ -296,6 +300,9 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       function! s:unite_settings()
         nmap <buffer> Q <plug>(unite_exit)
         nmap <buffer> <esc> <plug>(unite_exit)
+        let b:SuperTabDisabled=1
+        imap <buffer> <C-j> <Plug>(unite_select_next_line)
+        imap <buffer> <C-k> <Plug>(unite_select_previous_line)
       endfunction
       autocmd FileType unite call s:unite_settings()
 
@@ -306,7 +313,7 @@ let g:mapleader=","             " change the leader to be a comma vs slash
         nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec buffer file_mru bookmark<cr><c-u>
         nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec<cr><c-u>
       else
-        nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async buffer file_mru bookmark<cr><c-u>
+        nnoremap <silent> [unite]a :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async buffer file_mru bookmark<cr><c-u>
         nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async<cr><c-u>
       endif
       nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
@@ -315,9 +322,6 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
       nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
       nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
-    "}}}
-    NeoBundleLazy 'osyo-manga/unite-airline_themes', {'autoload':{'unite_sources':'airline_themes'}} "{{{
-      nnoremap <silent> [unite]a :<C-u>Unite -winheight=10 -auto-preview -buffer-name=airline_themes airline_themes<cr>
     "}}}
     NeoBundleLazy 'ujihisa/unite-colorscheme', {'autoload':{'unite_sources':'colorscheme'}} "{{{
       nnoremap <silent> [unite]c :<C-u>Unite -winheight=10 -auto-preview -buffer-name=colorschemes colorscheme<cr>
