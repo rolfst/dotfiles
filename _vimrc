@@ -52,9 +52,9 @@ filetype off
   "let s:settings.autocomplete_method = 'neocomplcache'
   let s:settings.enable_cursorcolumn = 0
   "let s:settings.colorscheme = 'jellybeans'
-  if filereadable(expand("~/.vim/bundle/YouCompleteMe/python/ycm_core.*"))
-    let s:settings.autocomplete_method = 'ycm'
-  endif
+  "if filereadable(expand("~/.vim/bundle/YouCompleteMe/python/ycm_core.*"))
+  "  let s:settings.autocomplete_method = 'ycm'
+  "endif
 
 " setup & neobundle {{{
   set nocompatible
@@ -105,7 +105,28 @@ filetype off
       bdelete
     endif
   endfunction "}}}
+
+    fun! SetupVAM()
+    let c = get(g:, 'vim_addon_manager', {})
+    let g:vim_addon_manager = c
+    let c.plugin_root_dir = expand('$HOME', 1) . '/.vim/vim-addons'
+    " most used options you may want to use:
+    " let c.log_to_buf = 1
+    " let c.auto_install = 0
+    let &rtp.=(empty(&rtp)?'':',').c.plugin_root_dir.'/vim-addon-manager'
+    if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
+        execute '!git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager '
+            \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
+    endif
+    call vam#ActivateAddons([], {'auto_install' : 0})
+    endfun
+
+    call SetupVAM()
+    VAMActivate matchit.zip vim-addon-commenting
+
+  
 "}}}
+
 
 set nocompatible              " Don't be compatible with vi
 let mapleader=","
@@ -196,19 +217,54 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       nnoremap <silent> <leader>gv :Gitv<CR>
       nnoremap <silent> <leader>gV :Gitv!<CR>
     "}}}
-    NeoBundle 'honza/vim-snippets'
+    NeoBundle 'honza/vim-snippets' "{{{
+    "}}}
+
 
     NeoBundle 'Valloric/YouCompleteMe', {'vim_version':'7.3.584'} "{{{
-        let g:ycm_complete_in_comments_and_strings=1
-        let g:ycm_key_list_select_completion=['<C-n>', '<Down>']
-        let g:ycm_key_list_previous_completion=['<C-p>', '<Up>']
+        let g:ycm_complete_in_comments=1
+        let g:ycm_complete_in_strings=1
+        let g:ycm_collect_identifiers_from_comments_and_strings=1
+        let g:ycm_key_list_select_completion=[]
+        let g:ycm_key_list_previous_completion=['<UP>']
         let g:ycm_filetype_blacklist={'unite': 1}
     "}}}
+    NeoBundle 'ervandew/supertab' "{{{
+        "let g:SuperTabDefaultCompletionType ='<C-n>'
+    "}}}
     NeoBundle 'SirVer/ultisnips' "{{{
-        let g:UltiSnipsExpandTrigger="<tab>"
+       "function! g:UltiSnips_Complete()
+       "    call UltiSnips#ExpandSnippet()
+       "    if g:ulti_expand_res == 0
+       "        if pumvisible()
+       "            return "\<C-n>"
+       "        else
+       "            call UltiSnips#JumpForwards()
+       "            if g:ulti_jump_forwards_res == 0
+       "                return "\<TAB>"
+       "            endif
+       "        endif
+       "    endif
+       "    return ""
+       "endfunction
+       "au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+        let g:UltiSnipsExpandTrigger="<C-tab>"
         let g:UltiSnipsJumpForwardTrigger="<tab>"
         let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-        let g:UltiSnipsSnippetsDir='~/.vim/snippets'
+        let g:UltiSnipsListSnippets="<C-e>"
+        " This maps Enter key to <C-y> to chose the current highlight item
+        " an close the selection list, same as other IDEs.
+        " Conflict with some plugins like tpope/endwise
+        " inoremap <expr> <CR> pumvisible() ? "\<C-y>" ; "\<C-g>u\<CR>"
+        "let g:UltiSnipsSnippetDirectories=["ultisnipssnippets", "Ultisnips"]
+        "let g:UltiSnipsSnippetsDir='~/.vim/ultisnipsnippets'
+        function! UltiSnipsCallUnite()
+            Unite -start-insert -winheight=100 -immediately -no-empty ultisnips
+            return ''
+        endfunction
+        
+        inoremap <silent> <F12> <C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
+        nnoremap <silent> <F12> a<C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
     "}}}
     NeoBundle 'mileszs/ack.vim' "{{{
       if executable('ag')
@@ -230,6 +286,8 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       let g:ctrlp_max_files=20000
       let g:ctrlp_cache_dir='~/.vim/.cache/ctrlp'
       let g:ctrlp_reuse_window='startify'
+      let g:ctrlp_map = '\p'
+      let g:ctrlp_cmd = 'CtrlP'
       let g:ctrlp_extensions=['funky']
       if executable('ag')
         let g:ctrlp_user_command='ag %s -l --nocolor -g ""'
@@ -272,14 +330,16 @@ let g:mapleader=","             " change the leader to be a comma vs slash
     
     NeoBundle 'tpope/vim-vinegar' "{{{
     "}}}
-    NeoBundle 'Shougo/unite.vim' "{{{
+
+    NeoBundle 'Shougo/unite.vim', {'depends': 'Shougo/neomru.vim'} "{{{
       let bundle = neobundle#get('unite.vim')
       function! bundle.hooks.on_source(bundle)
+      endfunction
         call unite#filters#matcher_default#use(['matcher_fuzzy'])
         call unite#filters#sorter_default#use(['sorter_rank'])
         call unite#set_profile('files', 'smartcase', 1)
-        call unite#custom#source('line,outline','matchers','matcher_fuzzy')
-      endfunction
+        call unite#custom#source('file_rec,file_rec/async,buffer,file,buffer,grep',
+            \ 'ignore_pattern', join(['\.grunt/','node_modules/', '.git'], '\|'))
 
       let g:unite_data_directory='~/.vim/.cache/unite'
       let g:unite_enable_start_insert=1
@@ -298,24 +358,28 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       endif
 
       function! s:unite_settings()
-        nmap <buffer> Q <plug>(unite_exit)
-        nmap <buffer> <esc> <plug>(unite_exit)
         let b:SuperTabDisabled=1
         imap <buffer> <C-j> <Plug>(unite_select_next_line)
         imap <buffer> <C-k> <Plug>(unite_select_previous_line)
+        imap <silent><buffer><expr> <C-x> unite#do_action('split')
+        imap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
+        imap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
+
+        nmap <buffer> Q <plug>(unite_exit)
+        nmap <buffer> <esc> <plug>(unite_exit)
       endfunction
       autocmd FileType unite call s:unite_settings()
 
       nmap <space> [unite]
       nnoremap [unite] <nop>
-
-      if s:is_windows
-        nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec buffer file_mru bookmark<cr><c-u>
-        nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec<cr><c-u>
-      else
-        nnoremap <silent> [unite]a :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec/async buffer file_mru bookmark<cr><c-u>
+      nnoremap <C-P> :<C-u>Unite -buffer-name=files -start-insert buffer file_rec/async!<cr><cr>
+     " if s:is_windows
+     "   nnoremap <silent> [unite]<space> :<C-u>Unite -toggle -auto-resize -buffer-name=mixed file_rec buffer file_mru bookmark<cr><c-u>
+     "   nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec<cr><c-u>
+     " else
+        nnoremap <silent> [unite]p :<C-u>Unite -toggle -auto-resize -start-insert  -buffer-name=mixed file_rec/async buffer tab file_mru bookmark<cr><cr>
         nnoremap <silent> [unite]f :<C-u>Unite -toggle -auto-resize -buffer-name=files file_rec/async<cr><c-u>
-      endif
+     " endif
       nnoremap <silent> [unite]y :<C-u>Unite -buffer-name=yanks history/yank<cr>
       nnoremap <silent> [unite]l :<C-u>Unite -auto-resize -buffer-name=line line<cr>
       nnoremap <silent> [unite]b :<C-u>Unite -auto-resize -buffer-name=buffers buffer<cr>
@@ -374,6 +438,7 @@ let g:mapleader=","             " change the leader to be a comma vs slash
     NeoBundle 'Lokaltog/powerline' "{{{
         set runtimepath+=~/.vim/bundle/powerline/powerline/bindings/vim
         set encoding=utf-8
+        call vam#ActivateAddons(['powerline'])
     "}}}
     NeoBundle 'MarcWeber/vim-addon-mw-utils'
     NeoBundle 'altercation/vim-colors-solarized' "{{{
