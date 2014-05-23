@@ -386,6 +386,37 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
       nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
       nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
+
+      "For unite-menu
+      let g:unite_source_menu_menus = {}
+
+      let g:unite_source_menu_menus.git={
+        \ 'description': 'manage git repositories'
+        \ }
+      let g:unite_source_menu_menus.ff ={
+        \'description': 'change fileformat option.'
+        \}
+      let g:unite_source_menu_menus.ff.command_candidates={
+        \'unix':'WUnix',
+        \'dos':'Wdos',
+        \'mac':'WMac'
+      \}
+      nnoremap <silent>;w :<C-u>Unite menu:ff<CR><CR>
+
+      let g:unite_source_menu_menus.unite={
+        \'description':'Start unite sources'
+    \}
+      let g:unite_source_menu_menus.unite.command_candidates={
+        \'history':'Unite history/command',
+        \'quickfix':'Unite qflist -no-quit',
+        \'resume':'Unite -buffer-name=resume resume',
+        \'directory':'Unite -buffer-name=files '.
+        \       '-default-action=lcd directory_mru',
+        \'mapping':'Unite mapping',
+        \'message':'Unite output:message',
+    \}
+      nnoremap <silent>;u :<C-u>Unite menu:unite -resume<CR><CR>
+      
     "}}}
     NeoBundleLazy 'ujihisa/unite-colorscheme', {'autoload':{'unite_sources':'colorscheme'}} "{{{
       nnoremap <silent> [unite]c :<C-u>Unite -winheight=10 -auto-preview -buffer-name=colorschemes colorscheme<cr>
@@ -460,6 +491,22 @@ let g:mapleader=","             " change the leader to be a comma vs slash
     NeoBundle 'tomtom/tcomment_vim'
     NeoBundle 'tomtom/tlib_vim'
     NeoBundle 'tpope/vim-surround'
+    NeoBundle 't9md/vim-surround_custom_mapping' "{{{
+        let g:surround_custom_mapping = {}
+        let g:surround_custom_mapping._={
+                    \'p':"<pre> \r <pre>",
+                    \'w': "%w(\r)",
+                    \}
+        let g:surround_custom_mapping.help={
+                    \'p': "> \r <",
+                    \}
+        let g:surround_custom_mapping.javascript={
+                    \'f': "function() { \r }"
+                    \}
+        let g:surround_custom_mapping.vim={
+                    \'f': "function! \r endfunction"
+                    \}
+    "}}}
 
     NeoBundleDepends 'kana/vim-textobj-user'
     NeoBundle 'kana/vim-textobj-indent'
