@@ -339,7 +339,7 @@ let g:mapleader=","             " change the leader to be a comma vs slash
         call unite#filters#sorter_default#use(['sorter_rank'])
         call unite#set_profile('files', 'smartcase', 1)
         call unite#custom#source('file_rec,file_rec/async,buffer,file,buffer,grep',
-            \ 'ignore_pattern', join(['\.grunt/','node_modules/', '.git'], '\|'))
+            \ 'ignore_pattern', join(['\.grunt/','node_modules/', '.git', '.idea', 'build'], '\|'))
 
       let g:unite_data_directory='~/.vim/.cache/unite'
       let g:unite_enable_start_insert=1
@@ -386,6 +386,7 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       nnoremap <silent> [unite]/ :<C-u>Unite -no-quit -buffer-name=search grep:.<cr>
       nnoremap <silent> [unite]m :<C-u>Unite -auto-resize -buffer-name=mappings mapping<cr>
       nnoremap <silent> [unite]s :<C-u>Unite -quick-match buffer<cr>
+      nnoremap <silent> [unite]g :<C-u>Unite -no-split grep:.<cr>
 
       "For unite-menu
       let g:unite_source_menu_menus = {}
