@@ -170,13 +170,31 @@ let g:mapleader=","             " change the leader to be a comma vs slash
         \ 'cygwin': 'npm install',
         \ 'windows': 'npm install',
       \ },
-    \ }
+    \ } "{{{
+        let g:tern_show_argument_hints = 'on_hold'
+    "}}}
     NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
     NeoBundleLazy 'maksimr/vim-jsbeautify', {'autoload':{'filetypes':['javascript']}} "{{{
         nnoremap <leader>fjs :call JsBeautify()<cr>
         autocmd FileType js,scss,css autocmd BufWritePre <buffer> call StripTrailingWhitespace()
     "}}}
+    NeoBundleLazy 'Shutnik/jshint2.vim' "{{{
+        " jshint validation
+        nnoremap <leader><F1> :JSHint<CR>
+        inoremap <leader><F1> <C-O>:JSHint<CR>
+        vnoremap <leader><F1> :JSHint<CR>
 
+        " show next jshint error
+        nnoremap <leader><F2> :lnext<CR>
+        inoremap <leader><F2> <C-O>:lnext<CR>
+        vnoremap <leader><F2> :lnext<CR>
+
+        " show previous jshint error
+        nnoremap <leader><F3> :lprevious<CR>
+        inoremap <leader><F3> <C-O>:lprevious<CR>
+        vnoremap <leader><F3> :lprevious<CR>
+    "}}}
+    NeoBundle "slava/vim-spacebars"
     NeoBundleLazy 'kchmck/vim-coffee-script', {'autoload':{'filetypes':['coffee']}}
     NeoBundleLazy 'mmalecki/vim-node.js', {'autoload':{'filetypes':['javascript']}}
     NeoBundleLazy 'leshill/vim-json', {'autoload':{'filetypes':['javascript','json']}}
@@ -225,8 +243,8 @@ let g:mapleader=","             " change the leader to be a comma vs slash
         let g:ycm_complete_in_comments=1
         let g:ycm_complete_in_strings=1
         let g:ycm_collect_identifiers_from_comments_and_strings=1
-        let g:ycm_key_list_select_completion=[]
-        let g:ycm_key_list_previous_completion=['<UP>']
+        let g:ycm_key_list_select_completion=['<C-n>', '<Down>']
+        let g:ycm_key_list_previous_completion=['<C-p>','<UP>']
         let g:ycm_filetype_blacklist={'unite': 1}
     "}}}
     NeoBundle 'ervandew/supertab' "{{{
@@ -248,7 +266,7 @@ let g:mapleader=","             " change the leader to be a comma vs slash
        "    return ""
        "endfunction
        "au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
-        let g:UltiSnipsExpandTrigger="<C-tab>"
+        let g:UltiSnipsExpandTrigger="<Tab>"
         let g:UltiSnipsJumpForwardTrigger="<tab>"
         let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
         let g:UltiSnipsListSnippets="<C-e>"
@@ -488,7 +506,15 @@ let g:mapleader=","             " change the leader to be a comma vs slash
     NeoBundle 'joonty/vdebug'
     NeoBundle 'mattboehm/vim-unstack'
     NeoBundle 'nathanaelkane/vim-indent-guides'
-    NeoBundle 'terryma/vim-multiple-cursors'
+    NeoBundle 'terryma/vim-multiple-cursors' "{{{
+        " Default mapping
+        let g:multi_cursor_use_default_mapping=0
+        " Multiple cursor
+        let g:multi_cursor_next_key='<C-i>'
+        let g:multi_cursor_prev_key='<C-h>'
+        let g:multi_cursor_skip_key='<C-x>'
+        let g:multi_cursor_quit_key='<Esc>'
+    "}}}
     NeoBundle 'tomtom/tcomment_vim'
     NeoBundle 'tomtom/tlib_vim'
     NeoBundle 'tpope/vim-surround'
@@ -600,9 +626,15 @@ autocmd FileType * setlocal colorcolumn=0
 
 """ Insert completion
 " don't select first item, follow typing in autocomplete
-set completeopt=menuone,longest,preview
+"set completeopt=menuone,longest,preview
 set pumheight=6             " Keep a small completion window
 
+" Gaming swap files "{{{
+" create the directory if it doesn't exist
+silent !mkdir ~/.vim/swap > /dev/null 2>&1
+set backupdir=~/.vim/swap/
+set directory=~/.vim/swap/
+"}}}
 " show a line at column 79
  if exists("&colorcolumn")
     set colorcolumn=79
@@ -705,9 +737,6 @@ nmap <leader>a <Esc>:Ag!
   endif
 
 
-" Multiple cursor
-" Default mapping
-let g:multi_cursor_next_key='<C-i>'
 
 """" Display
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
