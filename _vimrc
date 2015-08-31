@@ -355,7 +355,7 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       endfunction
         call unite#filters#matcher_default#use(['matcher_fuzzy'])
         call unite#filters#sorter_default#use(['sorter_rank'])
-        call unite#set_profile('files', 'smartcase', 1)
+        call unite#set_profile('files', 'context.smartcase', 1)
         call unite#custom#source('file_rec,file_rec/async,buffer,file,buffer,grep',
             \ 'ignore_pattern', join(['\.grunt/','node_modules/', '.git', '.idea', 'build'], '\|'))
 
