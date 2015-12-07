@@ -7,13 +7,33 @@ $1 = require('$2');$0
 endsnippet 
 
 snippet mod "node module" b
-(function(){
-	"use strict";
-	var $0
-	;
 
-	module.exports = exports =
+// exports of functions
+export $0
 })();
 endsnippet
 
+snippet desc "Mocha Test" b
+describe('$1', () => {
+	$0
+})
+endsnippet
 
+snippet tests "test harnas" b
+import chai from 'chai'
+let export = chai.export
+
+describe('$1', () => {
+	$0
+})
+endsnippet
+
+snippet impo "import" b
+import $1 from '$0'
+endsnippet
+
+snippet it "test itself" b
+it('should $1', () => {
+	$0
+})
+endsnippet
