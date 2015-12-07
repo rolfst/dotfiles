@@ -68,6 +68,10 @@ filetype off
 "}}}
 
 " functions {{{
+  function! StrTrim(txt)
+    return substitute(a:txt, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
+  endfunction
+
   function! Preserve(command) "{{{
     " preparation: save last search, and cursor position.
     let _s=@/
@@ -243,8 +247,8 @@ let g:mapleader=","             " change the leader to be a comma vs slash
         let g:ycm_complete_in_comments=1
         let g:ycm_complete_in_strings=1
         let g:ycm_collect_identifiers_from_comments_and_strings=1
-        let g:ycm_key_list_select_completion=['<C-n>', '<Down>']
-        let g:ycm_key_list_previous_completion=['<C-p>','<UP>']
+        let g:ycm_key_list_select_completion=['<C-n>']
+        let g:ycm_key_list_previous_completion=['<C-p>']
         let g:ycm_filetype_blacklist={'unite': 1}
     "}}}
     NeoBundle 'ervandew/supertab' "{{{
@@ -463,6 +467,8 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       let g:syntastic_style_error_symbol = '✠'
       let g:syntastic_warning_symbol = '∆'
       let g:syntastic_style_warning_symbol = '≈'
+      let b:syntastic_javascript_eslint_exec= StrTrim(system('npm-which eslint'))
+      let g:syntastic_javascript_checkers = ['eslint']
     "}}}
     NeoBundleLazy 'Shougo/vimshell.vim', {'autoload':{'commands':[ 'VimShell', 'VimShellInteractive' ]}} "{{{
       if s:is_macvim
@@ -652,9 +658,9 @@ set wrap                    " wrap text
 set linebreak               " don't wrap textin the middle of a word
 set autoindent              " always set autoindenting on
 set smartindent             " use smart indent if there is no indent file
-set tabstop=4               " <tab> inserts 4 spaces 
-set shiftwidth=4            " but an indent level is 2 spaces wide.
-set softtabstop=4           " <BS> over an autoindent deletes both spaces.
+set tabstop=2               " <tab> inserts 4 spaces 
+set shiftwidth=2            " but an indent level is 2 spaces wide.
+set softtabstop=2           " <BS> over an autoindent deletes both spaces.
 set expandtab               " Use spaces, not tabs, for autoindent/tab key.
 set shiftround              " rounds indent to a multiple of shiftwidth
 set matchpairs+=<:>         " show matching <> (html mainly) as well
