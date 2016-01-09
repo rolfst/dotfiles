@@ -37,36 +37,7 @@
 "    Run py.test test's from within vim
 "
 "
-" detect OS {{{
-  let s:is_windows = has('win32') || has('win64')
-  let s:is_cygwin = has('win32unix')
-  let s:is_macvim = has('gui_macvim')
-"}}}
-"
-filetype off
-
-"initialize default settings
-  let s:settings = {}
-  let s:settings.default_indent = 2
-  let s:settings.max_column = 120
-  "let s:settings.autocomplete_method = 'neocomplcache'
-  let s:settings.enable_cursorcolumn = 0
-  "let s:settings.colorscheme = 'jellybeans'
-  "if filereadable(expand("~/.vim/bundle/YouCompleteMe/python/ycm_core.*"))
-  "  let s:settings.autocomplete_method = 'ycm'
-  "endif
-
-" setup & neobundle {{{
-  set nocompatible
-  set all& "reset everything to their defaults
-  if s:is_windows
-    set runtimepath+=~/.vim
-  endif
-  set runtimepath+=~/.vim/bundle/neobundle.vim
-  call neobundle#rc(expand('~/.vim/bundle/'))
-  NeoBundleFetch 'Shougo/neobundle.vim'
-"}}}
-
+let g:python_host_prog = '/usr/bin/python'
 " functions {{{
   function! StrTrim(txt)
     return substitute(a:txt, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
@@ -109,48 +80,51 @@ filetype off
       bdelete
     endif
   endfunction "}}}
-
-    fun! SetupVAM()
-    let c = get(g:, 'vim_addon_manager', {})
-    let g:vim_addon_manager = c
-    let c.plugin_root_dir = expand('$HOME', 1) . '/.vim/vim-addons'
-    " most used options you may want to use:
-    " let c.log_to_buf = 1
-    " let c.auto_install = 0
-    let &rtp.=(empty(&rtp)?'':',').c.plugin_root_dir.'/vim-addon-manager'
-    if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
-        execute '!git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager '
-            \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
-    endif
-    call vam#ActivateAddons([], {'auto_install' : 0})
-    endfun
-
-    call SetupVAM()
-    VAMActivate matchit.zip vim-addon-commenting
-
-  
 "}}}
 
 
+" detect OS {{{
+  let s:is_windows = has('win32') || has('win64')
+  let s:is_cygwin = has('win32unix')
+  let s:is_macvim = has('gui_macvim')
+"}}}
+"
+filetype off
 set nocompatible              " Don't be compatible with vi
 let mapleader=","
 let g:mapleader=","             " change the leader to be a comma vs slash
 
-" my Bundles here:
+"Ever notice a slight lag after typing the leader key + command? This lowers
+"the timeout.
+set timeoutlen=1500
 
-    NeoBundleDepends 'Shougo/vimproc.vim', {
-      \ 'build': {
-        \ 'mac': 'make -f make_mac.mak',
-        \ 'unix': 'make -f make_unix.mak',
-        \ 'cygwin': 'make -f make_cygwin.mak',
-        \ 'windows': '"C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\nmake.exe" make_msvc32.mak',
-      \ },
-    \ }
+"initialize default settings
+  let s:settings = {}
+  let s:settings.default_indent = 2
+  let s:settings.max_column = 120
+  "let s:settings.autocomplete_method = 'neocomplcache'
+  let s:settings.enable_cursorcolumn = 0
+  "let s:settings.colorscheme = 'jellybeans'
+  "if filereadable(expand("~/.vim/bundle/YouCompleteMe/python/ycm_core.*"))
+  "  let s:settings.autocomplete_method = 'ycm'
+  "endif
+
+" setup & neobundle {{{
+
+  set nocompatible
+  set all& "reset everything to their defaults
+  if s:is_windows
+    set runtimepath+=~/.vim
+  endif
+  set runtimepath+=~/.vim/bundle/neobundle.vim
+  call neobundle#rc(expand('~/.vim/bundle/'))
+  NeoBundleFetch 'Shougo/neobundle.vim'
+"}}}
+
     NeoBundleLazy 'cakebaker/scss-syntax.vim', {'autoload':{'filetypes':['scss','sass']}} "{{{
         autocmd FileType css,scss setlocal foldmethod=marker foldmarker={,}
         autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
     "}}}
-    NeoBundleLazy 'hail2u/vim-css3-syntax', {'autoload':{'filetypes':['css','scss','sass']}}
     NeoBundleLazy 'hail2u/vim-css3-syntax', {'autoload':{'filetypes':['css','scss','sass']}}
     NeoBundleLazy 'ap/vim-css-color', {'autoload':{'filetypes':['css','scss','sass','less','styl']}}
     NeoBundleLazy 'othree/html5.vim', {'autoload':{'filetypes':['html']}}
@@ -166,6 +140,7 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       autocmd FileType xml,xsl,xslt,xsd,css,sass,scss,less,mustache imap <buffer><tab> <c-y>,
       autocmd FileType html imap <buffer><expr><tab> <sid>zen_html_tab()
     "}}}
+
     NeoBundleLazy 'marijnh/tern_for_vim', {
       \ 'autoload': { 'filetypes': ['javascript'] },
       \ 'build': {
@@ -175,168 +150,11 @@ let g:mapleader=","             " change the leader to be a comma vs slash
         \ 'windows': 'npm install',
       \ },
     \ } "{{{
-        let g:tern_show_argument_hints = 'on_hold'
+      set omnifunc=syntaxcomplete#Complete
+      let g:tern_map_keys=1
+      let g:tern_show_argument_hints = 'on_hold'
     "}}}
     NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
-    NeoBundleLazy 'maksimr/vim-jsbeautify', {'autoload':{'filetypes':['javascript']}} "{{{
-        nnoremap <leader>fjs :call JsBeautify()<cr>
-        autocmd FileType js,scss,css autocmd BufWritePre <buffer> call StripTrailingWhitespace()
-    "}}}
-    NeoBundleLazy 'Shutnik/jshint2.vim' "{{{
-        " jshint validation
-        nnoremap <leader><F1> :JSHint<CR>
-        inoremap <leader><F1> <C-O>:JSHint<CR>
-        vnoremap <leader><F1> :JSHint<CR>
-
-        " show next jshint error
-        nnoremap <leader><F2> :lnext<CR>
-        inoremap <leader><F2> <C-O>:lnext<CR>
-        vnoremap <leader><F2> :lnext<CR>
-
-        " show previous jshint error
-        nnoremap <leader><F3> :lprevious<CR>
-        inoremap <leader><F3> <C-O>:lprevious<CR>
-        vnoremap <leader><F3> :lprevious<CR>
-    "}}}
-    NeoBundle "slava/vim-spacebars"
-    NeoBundleLazy 'kchmck/vim-coffee-script', {'autoload':{'filetypes':['coffee']}}
-    NeoBundleLazy 'mmalecki/vim-node.js', {'autoload':{'filetypes':['javascript']}}
-    NeoBundleLazy 'leshill/vim-json', {'autoload':{'filetypes':['javascript','json']}}
-    NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {'autoload':{'filetypes':['javascript','coffee','ls']}}
-    NeoBundleLazy 'klen/python-mode', {'autoload':{'filetypes':['python']}} "{{{
-      let g:pymode_rope=0
-        autocmd FileType python setlocal foldmethod=indent
-    "}}}
-    NeoBundleLazy 'davidhalter/jedi-vim', {'autoload':{'filetypes':['python']}} "{{{
-      let g:jedi#popup_on_dot=0
-    "}}}
-
-    NeoBundle 'alfredodeza/pytest.vim'
-
-    if executable('hg')
-      NeoBundle 'bitbucket:ludovicchabant/vim-lawrencium'
-    endif
-
-    NeoBundle 'tpope/vim-fugitive' "{{{
-      nnoremap <silent> <leader>gs :Gstatus<CR>
-      nnoremap <silent> <leader>gd :Gdiff<CR>
-      nnoremap <silent> <leader>gc :Gcommit<CR>
-      nnoremap <silent> <leader>gb :Gblame<CR>
-      nnoremap <silent> <leader>gl :Glog<CR>
-      nnoremap <silent> <leader>gp :Git push<CR>
-      nnoremap <silent> <leader>gw :Gwrite<CR>
-      nnoremap <silent> <leader>gr :Gremove<CR>
-      autocmd FileType gitcommit nmap <buffer> U :Git checkout -- <C-r><C-g><CR>
-      autocmd BufReadPost fugitive://* set bufhidden=delete
-    "}}}
-    
-    NeoBundle 'vim-scripts/vcscommand.vim' "{{{
-        nnoremap <leader>sa :VCSAdd
-        nnoremap <leader>sc :VCSCommit
-    "}}}
-
-    NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'], 'autoload':{'commands':'Gitv'}} "{{{
-      nnoremap <silent> <leader>gv :Gitv<CR>
-      nnoremap <silent> <leader>gV :Gitv!<CR>
-    "}}}
-    NeoBundle 'honza/vim-snippets' "{{{
-    "}}}
-
-
-    NeoBundle 'Valloric/YouCompleteMe', {'vim_version':'7.3.584'} "{{{
-        let g:ycm_complete_in_comments=1
-        let g:ycm_complete_in_strings=1
-        let g:ycm_collect_identifiers_from_comments_and_strings=1
-        let g:ycm_key_list_select_completion=['<C-n>']
-        let g:ycm_key_list_previous_completion=['<C-p>']
-        let g:ycm_filetype_blacklist={'unite': 1}
-    "}}}
-    NeoBundle 'ervandew/supertab' "{{{
-        "let g:SuperTabDefaultCompletionType ='<C-n>'
-    "}}}
-    NeoBundle 'SirVer/ultisnips' "{{{
-       "function! g:UltiSnips_Complete()
-       "    call UltiSnips#ExpandSnippet()
-       "    if g:ulti_expand_res == 0
-       "        if pumvisible()
-       "            return "\<C-n>"
-       "        else
-       "            call UltiSnips#JumpForwards()
-       "            if g:ulti_jump_forwards_res == 0
-       "                return "\<TAB>"
-       "            endif
-       "        endif
-       "    endif
-       "    return ""
-       "endfunction
-       "au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
-        let g:UltiSnipsExpandTrigger="<Tab>"
-        let g:UltiSnipsJumpForwardTrigger="<tab>"
-        let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-        let g:UltiSnipsListSnippets="<C-e>"
-        " This maps Enter key to <C-y> to chose the current highlight item
-        " an close the selection list, same as other IDEs.
-        " Conflict with some plugins like tpope/endwise
-        " inoremap <expr> <CR> pumvisible() ? "\<C-y>" ; "\<C-g>u\<CR>"
-        "let g:UltiSnipsSnippetDirectories=["ultisnipssnippets", "Ultisnips"]
-        "let g:UltiSnipsSnippetsDir='~/.vim/ultisnipsnippets'
-        function! UltiSnipsCallUnite()
-            Unite -start-insert -winheight=100 -immediately -no-empty ultisnips
-            return ''
-        endfunction
-        
-        inoremap <silent> <F12> <C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
-        nnoremap <silent> <F12> a<C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
-    "}}}
-    NeoBundle 'mileszs/ack.vim' "{{{
-      if executable('ag')
-        let g:ackprg = "ag --nogroup --column --smart-case --follow"
-      endif
-    "}}}
-
-    NeoBundleLazy 'mbbill/undotree', {'autoload':{'commands':'UndotreeToggle'}} "{{{
-      let g:undotree_SplitLocation='botright'
-      let g:undotree_SetFocusWhenToggle=1
-      nnoremap <silent> <F5> :UndotreeToggle<CR>
-    "}}}
-    NeoBundle 'kien/ctrlp.vim', { 'depends': 'tacahiroy/ctrlp-funky' } "{{{
-      let g:ctrlp_clear_cache_on_exit=1
-      let g:ctrlp_max_height=40
-      let g:ctrlp_show_hidden=0
-      let g:ctrlp_follow_symlinks=1
-      let g:ctrlp_working_path_mode=0
-      let g:ctrlp_max_files=20000
-      let g:ctrlp_cache_dir='~/.vim/.cache/ctrlp'
-      let g:ctrlp_reuse_window='startify'
-      let g:ctrlp_map = '\p'
-      let g:ctrlp_cmd = 'CtrlP'
-      let g:ctrlp_extensions=['funky']
-      if executable('ag')
-        let g:ctrlp_user_command='ag %s -l --nocolor -g ""'
-      endif
-
-      nmap \ [ctrlp]
-      nnoremap [ctrlp] <nop>
-
-      nnoremap [ctrlp]t :CtrlPBufTag<cr>
-      nnoremap [ctrlp]T :CtrlPTag<cr>
-      nnoremap [ctrlp]l :CtrlPLine<cr>
-      nnoremap [ctrlp]o :CtrlPFunky<cr>
-      nnoremap [ctrlp]b :CtrlPBuffer<cr>
-
-    let g:ctrlp_custom_ignore = {
-        \ 'dir':  '\v[\/](\.(git|hg|svn)$|(install|CPAN)$)',
-        \ 'file': '\v\.(exe|so|dll)$',
-        \ }
-
-
-    " allows opening a split from ctrlp with <c-i>, since using 'i' from NERDTree
-    " is how to open a horizontal split there. Keep em the same.
-    let g:ctrlp_prompt_mappings = {
-        \ 'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>', '<c-i>']
-        \ }
-
-    "}}}
     NeoBundle 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
       let NERDTreeShowHidden=1
       let NERDTreeQuitOnOpen=0
@@ -441,6 +259,183 @@ let g:mapleader=","             " change the leader to be a comma vs slash
       nnoremap <silent>;u :<C-u>Unite menu:unite -resume<CR><CR>
       
     "}}}
+
+    NeoBundle 'fholgado/minibufexpl.vim' "{{{
+    "}}}
+    NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
+    NeoBundleLazy 'maksimr/vim-jsbeautify', {'autoload':{'filetypes':['javascript']}} "{{{
+        nnoremap <leader>fjs :call JsBeautify()<cr>
+        autocmd FileType js,scss,css autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+    "}}}
+    NeoBundle "slava/vim-spacebars"
+    NeoBundleLazy 'kchmck/vim-coffee-script', {'autoload':{'filetypes':['coffee']}}
+    NeoBundleLazy 'mmalecki/vim-node.js', {'autoload':{'filetypes':['javascript']}}
+    NeoBundleLazy 'leshill/vim-json', {'autoload':{'filetypes':['javascript','json']}}
+    NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {'autoload':{'filetypes':['javascript','coffee','ls']}}
+    NeoBundleLazy 'klen/python-mode', {'autoload':{'filetypes':['python']}} "{{{
+      let g:pymode_rope=0
+        autocmd FileType python setlocal foldmethod=indent
+    "}}}
+    NeoBundleLazy 'davidhalter/jedi-vim', {'autoload':{'filetypes':['python']}} "{{{
+      let g:jedi#popup_on_dot=0
+    "}}}
+
+    NeoBundle 'alfredodeza/pytest.vim'
+
+    if executable('hg')
+      NeoBundle 'bitbucket:ludovicchabant/vim-lawrencium'
+    endif
+
+    NeoBundle 'tpope/vim-fugitive' "{{{
+      nnoremap <silent> <leader>gs :Gstatus<CR>
+      nnoremap <silent> <leader>gd :Gdiff<CR>
+      nnoremap <silent> <leader>gc :Gcommit<CR>
+      nnoremap <silent> <leader>gb :Gblame<CR>
+      nnoremap <silent> <leader>gl :Glog<CR>
+      nnoremap <silent> <leader>gp :Git push<CR>
+      nnoremap <silent> <leader>gw :Gwrite<CR>
+      nnoremap <silent> <leader>gr :Gremove<CR>
+      autocmd FileType gitcommit nmap <buffer> U :Git checkout -- <C-r><C-g><CR>
+      autocmd BufReadPost fugitive://* set bufhidden=delete
+    "}}}
+    
+    NeoBundle 'vim-scripts/vcscommand.vim' "{{{
+        nnoremap <leader>sa :VCSAdd
+        nnoremap <leader>sc :VCSCommit
+    "}}}
+
+    NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'], 'autoload':{'commands':'Gitv'}} "{{{
+      nnoremap <silent> <leader>gv :Gitv<CR>
+      nnoremap <silent> <leader>gV :Gitv!<CR>
+    "}}}
+    NeoBundle 'honza/vim-snippets' "{{{
+    "}}}
+
+
+    NeoBundle 'Valloric/YouCompleteMe', {'vim_version':'7.3.584'} "{{{
+        let g:ycm_complete_in_comments=1
+        let g:ycm_complete_in_strings=1
+        let g:ycm_collect_identifiers_from_comments_and_strings=1
+        let g:ycm_key_list_select_completion=['<C-n>']
+        let g:ycm_key_list_previous_completion=['<C-p>']
+        let g:ycm_filetype_blacklist={'unite': 1}
+        let g:ycm_semantic_triggers =  {
+          \   'c' : ['->', '.'],
+          \   'objc' : ['->', '.'],
+          \   'ocaml' : ['.', '#'],
+          \   'cpp,objcpp' : ['->', '.', '::'],
+          \   'perl' : ['->'],
+          \   'php' : ['->', '::'],
+          \   'cs,java,javascript,d,python,perl6,scala,vb,elixir,go' : ['.'],
+          \   'vim' : ['re![_a-zA-Z]+[_\w]*\.'],
+          \   'ruby' : ['.', '::'],
+          \   'lua' : ['.', ':'],
+          \   'erlang' : [':'],
+          \ }
+
+    "}}}
+    NeoBundle 'ervandew/supertab' "{{{
+        let g:SuperTabDefaultCompletionType ='<C-n>'
+    "}}}
+    NeoBundle 'SirVer/ultisnips' "{{{
+       "function! g:UltiSnips_Complete()
+       "    call UltiSnips#ExpandSnippet()
+       "    if g:ulti_expand_res == 0
+       "        if pumvisible()
+       "            return "\<C-n>"
+       "        else
+       "            call UltiSnips#JumpForwards()
+       "            if g:ulti_jump_forwards_res == 0
+       "                return "\<TAB>"
+       "            endif
+       "        endif
+       "    endif
+       "    return ""
+       "endfunction
+       "au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+        let g:UltiSnipsExpandTrigger="<Tab>"
+        let g:UltiSnipsJumpForwardTrigger="<tab>"
+        let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+        let g:UltiSnipsListSnippets="<C-e>"
+        " This maps Enter key to <C-y> to chose the current highlight item
+        " an close the selection list, same as other IDEs.
+        " Conflict with some plugins like tpope/endwise
+        " inoremap <expr> <CR> pumvisible() ? "\<C-y>" ; "\<C-g>u\<CR>"
+        "let g:UltiSnipsSnippetDirectories=["ultisnipssnippets", "Ultisnips"]
+        "let g:UltiSnipsSnippetsDir='~/.vim/ultisnipsnippets'
+        function! UltiSnipsCallUnite()
+            Unite -start-insert -winheight=100 -immediately -no-empty ultisnips
+            return ''
+        endfunction
+
+        inoremap <silent> <F12> <C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
+        nnoremap <silent> <F12> a<C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
+    "}}}
+    NeoBundle 'mileszs/ack.vim' "{{{
+      if executable('ag')
+        let g:ackprg = "ag --nogroup --column --smart-case --follow"
+      endif
+    "}}}
+
+    NeoBundleLazy 'mbbill/undotree', {'autoload':{'commands':'UndotreeToggle'}} "{{{
+      let g:undotree_SplitLocation='botright'
+      let g:undotree_SetFocusWhenToggle=1
+      nnoremap <silent> <F5> :UndotreeToggle<CR>
+    "}}}
+    NeoBundle 'kien/ctrlp.vim', { 'depends': 'tacahiroy/ctrlp-funky' } "{{{
+      let g:ctrlp_clear_cache_on_exit=1
+      let g:ctrlp_max_height=40
+      let g:ctrlp_show_hidden=0
+      let g:ctrlp_follow_symlinks=1
+      let g:ctrlp_working_path_mode=0
+      let g:ctrlp_max_files=20000
+      let g:ctrlp_cache_dir='~/.vim/.cache/ctrlp'
+      let g:ctrlp_reuse_window='startify'
+      let g:ctrlp_map = '\p'
+      let g:ctrlp_cmd = 'CtrlP'
+      let g:ctrlp_extensions=['funky']
+      if executable('ag')
+        let g:ctrlp_user_command='ag %s -l --nocolor -g ""'
+      endif
+
+      nmap \ [ctrlp]
+      nnoremap [ctrlp] <nop>
+
+      nnoremap [ctrlp]t :CtrlPBufTag<cr>
+      nnoremap [ctrlp]T :CtrlPTag<cr>
+      nnoremap [ctrlp]l :CtrlPLine<cr>
+      nnoremap [ctrlp]o :CtrlPFunky<cr>
+      nnoremap [ctrlp]b :CtrlPBuffer<cr>
+
+    let g:ctrlp_custom_ignore = {
+        \ 'dir':  '\v[\/](\.(git|hg|svn)$|(install|CPAN)$)',
+        \ 'file': '\v\.(exe|so|dll)$',
+        \ }
+
+
+    " allows opening a split from ctrlp with <c-i>, since using 'i' from NERDTree
+    " is how to open a horizontal split there. Keep em the same.
+    let g:ctrlp_prompt_mappings = {
+        \ 'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>', '<c-i>']
+        \ }
+
+    "}}}
+    NeoBundle 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
+      let NERDTreeShowHidden=1
+      let NERDTreeQuitOnOpen=0
+      let NERDTreeShowLineNumbers=1
+      let NERDTreeChDirMode=0
+      let NERDTreeShowBookmarks=1
+      let NERDTreeIgnore=['\.git','\.hg', 'CVS']
+      let NERDTreeBookmarksFile='~/.vim/.cache/NERDTreeBookmarks'
+      let NERDTreeHijackNetrw=1
+      nnoremap <leader>n :NERDTreeToggle<CR>
+      nnoremap <leader>f :NERDTreeFind<CR>
+    "}}}
+    
+    NeoBundle 'tpope/vim-vinegar' "{{{
+    "}}}
+
     NeoBundleLazy 'ujihisa/unite-colorscheme', {'autoload':{'unite_sources':'colorscheme'}} "{{{
       nnoremap <silent> [unite]c :<C-u>Unite -winheight=10 -auto-preview -buffer-name=colorschemes colorscheme<cr>
     "}}}
@@ -494,7 +489,6 @@ let g:mapleader=","             " change the leader to be a comma vs slash
     NeoBundle 'Lokaltog/powerline' "{{{
         set runtimepath+=~/.vim/bundle/powerline/powerline/bindings/vim
         set encoding=utf-8
-        call vam#ActivateAddons(['powerline'])
     "}}}
     NeoBundle 'MarcWeber/vim-addon-mw-utils'
     NeoBundle 'altercation/vim-colors-solarized' "{{{
@@ -550,16 +544,6 @@ let g:mapleader=","             " change the leader to be a comma vs slash
 
 
 let g:Powerline_symbols="fancy"
-" ==========================================================
-" Basic Settings
-" ==========================================================
-" allows local vimrc
-set exrc
-" ==========================================================
-" Shortcuts
-" ==========================================================
-set nocompatible              " Don't be compatible with vim
-
 set history=700
 syntax on                     " syntax highlighing
 filetype on                   " try to detect filetypes
@@ -617,8 +601,6 @@ set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
     "              | +-- modified flag in square brackets
     "              +-- full path to file in the buffer
 
-
-
 " Ignore these files when completing
 set wildignore+=*.o,*.obj,.git,*.pyc
 set grepprg=ack-grep          " replace the default grep program with ack
@@ -629,22 +611,6 @@ nnoremap <leader>. :lcd %:p:h<CR>
 " Disable the colorcolumn when switching modes.  Make sure this is the
 " first autocmd for the filetype here
 autocmd FileType * setlocal colorcolumn=0
-
-""" Insert completion
-" don't select first item, follow typing in autocomplete
-"set completeopt=menuone,longest,preview
-set pumheight=6             " Keep a small completion window
-
-" Gaming swap files "{{{
-" create the directory if it doesn't exist
-silent !mkdir ~/.vim/swap > /dev/null 2>&1
-set backupdir=~/.vim/swap/
-set directory=~/.vim/swap/
-"}}}
-" show a line at column 79
- if exists("&colorcolumn")
-    set colorcolumn=79
-endif
 
 """ Moving Around/Editing
 set cursorline              " have a line indicate the cursor location
@@ -670,10 +636,6 @@ set foldcolumn=1            " show the fold column
 
 " don't outdent hashes
 inoremap # #
-
-" close preview window automatically when we move around
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 """" Reading/Writing
 set noautowrite             " Never write a file unless I request it.
@@ -742,8 +704,6 @@ nmap <leader>a <Esc>:Ag!
     set grepformat=%f:%l:%c:%m
   endif
 
-
-
 """" Display
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors and Fonts
@@ -772,7 +732,6 @@ nnoremap <leader>S :%s/\s\+$//<cr>:let @/=''<CR>
 
 " Select the item in the list with enter
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
 
 
 """"""""""""""""""""""""""""""
