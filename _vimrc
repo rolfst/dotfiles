@@ -472,6 +472,10 @@ NeoBundle 'Shougo/vimproc.vim', {
       let g:syntastic_style_error_symbol = '✠'
       let g:syntastic_warning_symbol = '∆'
       let g:syntastic_style_warning_symbol = '≈'
+      let g:syntastic_always_populate_loc_list = 1
+      let g:syntastic_auto_loc_list = 1
+      let g:syntastic_check_on_open = 1
+      let g:syntastic_check_on_wq = 0
       let b:syntastic_javascript_eslint_exec= StrTrim(system('npm-which eslint'))
       let g:syntastic_javascript_checkers = ['eslint']
     "}}}
@@ -550,8 +554,13 @@ NeoBundle 'Shougo/vimproc.vim', {
     NeoBundle 'kana/vim-textobj-entire'
     NeoBundle 'lucapette/vim-textobj-underscore'
 
+    NeoBundleLazy 'tpope/vim-fireplace' "{{{}}}
+
     nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
 
+" set backupdir=$VIMRUNTIME/swap/
+" set directory=$VIMRUNTIME/swap/
+" silent execute '!rm "'.$VIMRUNTIME.'/temp/*~"'
 
 let g:Powerline_symbols="fancy"
 set history=700

@@ -9,23 +9,23 @@ endsnippet
 snippet mod "node module" b
 
 // exports of functions
-export $0
+modules.export $0
 })();
 endsnippet
 
 snippet desc "Mocha Test" b
-describe('$1', () => {
+describe('$1', function (${2:done}) {
 	$0
-})
+});
 endsnippet
 
 snippet tests "test harnas" b
 import chai from 'chai'
 let export = chai.export
 
-describe('$1', () => {
+describe('$1', function (${2:done}) {
 	$0
-})
+});
 endsnippet
 
 snippet impo "import" b
@@ -33,7 +33,13 @@ import $1 from '$0'
 endsnippet
 
 snippet it "test itself" b
-it('should $1', () => {
+it('should $1', function (${2:done}) {
 	$0
-})
+});
+endsnippet
+
+snippet fun "inserts a function"
+function ($1) {
+	$0
+}
 endsnippet
