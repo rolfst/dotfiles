@@ -113,6 +113,7 @@ set timeoutlen=1500
 
   set nocompatible
   set all& "reset everything to their defaults
+  set runtimepath+=~/.vim,/Applications/MacVim.app/Contents/Resources/vim/
   if s:is_windows
     set runtimepath+=~/.vim
   endif
@@ -381,10 +382,22 @@ NeoBundle 'Shougo/vimproc.vim', {
         inoremap <silent> <F12> <C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
         nnoremap <silent> <F12> a<C-R>=(pumvisible()? "\<LT>C-E>":"")<CR><C-R>=UltiSnipsCallUnite()<CR>
     "}}}
-    NeoBundle 'mileszs/ack.vim' "{{{
-      if executable('ag')
-        let g:ackprg = "ag --nogroup --column --smart-case --follow"
+    "NeoBundle 'mileszs/ack.vim' "{{{
+    "  if executable('ag')
+    "    let g:ackprg = "ag --nogroup --column --smart-case --follow"
+    "  endif
+    ""}}}
+    NeoBundleLazy 'wincent/ferret', { 'depends': 'tpope/vim-dispatch'} "{{{
+    "}}}
+    NeoBundle 'vim-ctrlspace/vim-ctrlspace' "{{{
+      if executable("ag")
+        let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
       endif
+    "}}}
+    "
+    NeoBundleLazy 'vim-airline/vim-airline', { 'depends': ['vim-airline/vim-airline-themes', 'edkolev/tmuxline.vim']} "{{{
+      let g:airline#extensions#tmuxline#enabled = 0
+      let g:airline#extensions#tabline#enabled = 1
     "}}}
 
     NeoBundleLazy 'mbbill/undotree', {'autoload':{'commands':'UndotreeToggle'}} "{{{
@@ -500,10 +513,10 @@ NeoBundle 'Shougo/vimproc.vim', {
     NeoBundle 'fholgado/minibufexpl.vim' "{{{
     "}}}
 
-    NeoBundle 'Lokaltog/powerline' "{{{
-        set runtimepath+=~/.vim/bundle/powerline/powerline/bindings/vim
-        set encoding=utf-8
-    "}}}
+    "NeoBundle 'Lokaltog/powerline' "{{{
+    "    set runtimepath+=~/.vim/bundle/powerline/powerline/bindings/vim
+    "    set encoding=utf-8
+    ""}}}
     NeoBundle 'MarcWeber/vim-addon-mw-utils'
     NeoBundle 'altercation/vim-colors-solarized' "{{{
         set gfn=Inconsolata\ 12
