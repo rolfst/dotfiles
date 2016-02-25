@@ -38,8 +38,12 @@ it('should $1', function (${2:done}) {
 });
 endsnippet
 
-snippet fun "inserts a function"
+snippet func "inserts a function" w
 function ($1) {
 	$0
 }
+endsnippet
+
+snippet var "creates a variable" b
+var $1 = $0;
 endsnippet
