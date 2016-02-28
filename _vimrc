@@ -128,9 +128,9 @@ set timeoutlen=1500
     "}}}
     NeoBundleLazy 'hail2u/vim-css3-syntax', {'autoload':{'filetypes':['css','scss','sass']}}
     NeoBundleLazy 'ap/vim-css-color', {'autoload':{'filetypes':['css','scss','sass','less','styl']}}
-    NeoBundleLazy 'othree/html5.vim', {'autoload':{'filetypes':['html']}}
+    NeoBundle 'othree/html5.vim', {'autoload':{'filetypes':['html']}}
     NeoBundleLazy 'wavded/vim-stylus', {'autoload':{'filetypes':['styl']}}
-    NeoBundleLazy 'mattn/emmet-vim', {'autoload':{'filetypes':['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache']}} "{{{
+    NeoBundle 'mattn/emmet-vim', {'autoload':{'filetypes':['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache']}} "{{{
       function! s:zen_html_tab()
         let line = getline('.')
         if match(line, '<.*>') < 0
@@ -142,7 +142,7 @@ set timeoutlen=1500
       autocmd FileType html imap <buffer><expr><tab> <sid>zen_html_tab()
     "}}}
 
-    NeoBundleLazy 'marijnh/tern_for_vim', {
+    NeoBundle 'marijnh/tern_for_vim', {
       \ 'autoload': { 'filetypes': ['javascript'] },
       \ 'build': {
         \ 'mac': 'npm install',
@@ -155,7 +155,8 @@ set timeoutlen=1500
       let g:tern_map_keys=1
       let g:tern_show_argument_hints = 'on_hold'
     "}}}
-    NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
+    NeoBundle 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
+    NeoBundle 'tpope/vim-jdaddy' "{{{}}}
     NeoBundle 'scrooloose/nerdtree', {'autoload':{'commands':['NERDTreeToggle','NERDTreeFind']}} "{{{
       let NERDTreeShowHidden=1
       let NERDTreeQuitOnOpen=0
@@ -273,15 +274,15 @@ NeoBundle 'Shougo/vimproc.vim', {
 
     NeoBundle 'fholgado/minibufexpl.vim' "{{{
     "}}}
-    NeoBundleLazy 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
+    NeoBundle 'pangloss/vim-javascript', {'autoload':{'filetypes':['javascript']}}
     NeoBundleLazy 'maksimr/vim-jsbeautify', {'autoload':{'filetypes':['javascript']}} "{{{
         nnoremap <leader>fjs :call JsBeautify()<cr>
         autocmd FileType js,scss,css autocmd BufWritePre <buffer> call StripTrailingWhitespace()
     "}}}
     NeoBundle "slava/vim-spacebars"
     NeoBundleLazy 'kchmck/vim-coffee-script', {'autoload':{'filetypes':['coffee']}}
-    NeoBundleLazy 'mmalecki/vim-node.js', {'autoload':{'filetypes':['javascript']}}
-    NeoBundleLazy 'leshill/vim-json', {'autoload':{'filetypes':['javascript','json']}}
+    NeoBundle 'mmalecki/vim-node.js', {'autoload':{'filetypes':['javascript']}}
+    NeoBundle 'leshill/vim-json', {'autoload':{'filetypes':['javascript','json']}}
     NeoBundleLazy 'othree/javascript-libraries-syntax.vim', {'autoload':{'filetypes':['javascript','coffee','ls']}}
     NeoBundleLazy 'klen/python-mode', {'autoload':{'filetypes':['python']}} "{{{
       let g:pymode_rope=0
@@ -387,7 +388,7 @@ NeoBundle 'Shougo/vimproc.vim', {
     "    let g:ackprg = "ag --nogroup --column --smart-case --follow"
     "  endif
     ""}}}
-    NeoBundleLazy 'wincent/ferret', { 'depends': 'tpope/vim-dispatch'} "{{{
+    NeoBundle 'wincent/ferret', { 'depends': 'tpope/vim-dispatch'} "{{{
     "}}}
     NeoBundle 'vim-ctrlspace/vim-ctrlspace' "{{{
       if executable("ag")
@@ -395,13 +396,13 @@ NeoBundle 'Shougo/vimproc.vim', {
       endif
     "}}}
     "
-    NeoBundleLazy 'vim-airline/vim-airline', { 'depends': ['vim-airline/vim-airline-themes', 'edkolev/tmuxline.vim']} "{{{
+    NeoBundle 'vim-airline/vim-airline', { 'depends': ['vim-airline/vim-airline-themes', 'edkolev/tmuxline.vim']} "{{{
       let g:airline#extensions#tmuxline#enabled = 0
       let g:airline#extensions#tabline#enabled = 1
     "}}}
 
-    NeoBundleLazy 'mbbill/undotree', {'autoload':{'commands':'UndotreeToggle'}} "{{{
-      let g:undotree_SplitLocation='botright'
+    NeoBundle 'mbbill/undotree', {'autoload':{'commands':'UndotreeToggle'}} "{{{
+      let g:undotree_WindowLayout ='botright'
       let g:undotree_SetFocusWhenToggle=1
       nnoremap <silent> <F5> :UndotreeToggle<CR>
     "}}}
@@ -488,9 +489,12 @@ NeoBundle 'Shougo/vimproc.vim', {
       let g:syntastic_always_populate_loc_list = 1
       let g:syntastic_auto_loc_list = 1
       let g:syntastic_check_on_open = 1
-      let g:syntastic_check_on_wq = 0
+      let g:syntastic_enable_signs = 1
+      let g:syntastic_check_on_wq = 1
       let b:syntastic_javascript_eslint_exec= StrTrim(system('npm-which eslint'))
       let g:syntastic_javascript_checkers = ['eslint']
+      let g:syntastic_mode_map = {'mode': 'active',
+            \ 'active_filetypes': ['javascript']}
     "}}}
     NeoBundleLazy 'Shougo/vimshell.vim', {'autoload':{'commands':[ 'VimShell', 'VimShellInteractive' ]}} "{{{
       if s:is_macvim
@@ -531,7 +535,9 @@ NeoBundle 'Shougo/vimproc.vim', {
         colorscheme solarized
     "}}}
     NeoBundle 'joonty/vdebug'
-    NeoBundle 'mattboehm/vim-unstack'
+    NeoBundle 'mattboehm/vim-unstack' "{{{
+      let g:unstack_mapkey='<leader>us'
+    "}}}
     NeoBundle 'nathanaelkane/vim-indent-guides'
     NeoBundle 'terryma/vim-multiple-cursors' "{{{
         " Default mapping
@@ -567,7 +573,7 @@ NeoBundle 'Shougo/vimproc.vim', {
     NeoBundle 'kana/vim-textobj-entire'
     NeoBundle 'lucapette/vim-textobj-underscore'
 
-    NeoBundleLazy 'tpope/vim-fireplace' "{{{}}}
+    NeoBundleLazy 'tpope/vim-fireplace', { 'depends' : ['tpope/vim-salve'] } "{{{}}}
 
     nnoremap <leader>nbu :Unite neobundle/update -vertical -no-start-insert<cr>
 
@@ -598,6 +604,7 @@ set noerrorbells
 set novisualbell
 set vb t_vb=
 set tm=500
+set hidden
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
@@ -726,15 +733,15 @@ vnoremap < <<CR>gv
 imap <C-W> <C-O><C-W>
 
 " Ack searching
-nmap <leader>a <Esc>:Ag!
-  if executable('ack')
-    set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
-    set grepformat=%f:%l:%c:%m
-  endif
-  if executable('ag')
-    set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
-    set grepformat=%f:%l:%c:%m
-  endif
+"nmap <leader>ag <Esc>:Ag
+"  if executable('ack')
+"    set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
+"    set grepformat=%f:%l:%c:%m
+"  endif
+"  if executable('ag')
+"    set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
+"    set grepformat=%f:%l:%c:%m
+"  endif
 
 """" Display
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
