@@ -14,16 +14,27 @@ modules.export $0
 endsnippet
 
 snippet desc "Mocha Test" b
-describe('$1', function (${2:done}) {
+describe('$1', function () {
 	$0
 });
 endsnippet
 
-snippet tests "test harnas" b
+snippet es6test "test harnas" b
 import chai from 'chai'
-let export = chai.export
+let expect = chai.export
 
-describe('$1', function (${2:done}) {
+describe('$1', () => {
+	$0
+});
+endsnippet
+
+snippet test "test harnas" b
+'use strict';
+
+var chai = require('chai');
+var expect = chai.export
+
+describe('$1', function () {
 	$0
 });
 endsnippet
@@ -39,11 +50,15 @@ it('should $1', function (${2:done}) {
 endsnippet
 
 snippet func "inserts a function" w
-function ($1) {
+function $1($2) {
 	$0
 }
 endsnippet
 
 snippet var "creates a variable" b
 var $1 = $0;
+endsnippet
+
+snippet cons "inserts jsonable console.log" w
+console.log(${1:'%j',}$0);
 endsnippet
