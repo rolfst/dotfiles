@@ -91,3 +91,6 @@
 [submodule "_vim/bundle/vcscommand"]
 	path = _vim/bundle/vcscommand
 	url = http://repo.or.cz/r/vcscommand.git
+[submodule "falkorsdotfiles"]
+	path = falkorsdotfiles
+	url = ./falkorsdotfiles

@@ -487,15 +487,25 @@ NeoBundle 'Shougo/vimproc.vim', {
       let g:syntastic_warning_symbol = '∆'
       let g:syntastic_style_warning_symbol = '≈'
       let g:syntastic_always_populate_loc_list = 1
-      let g:syntastic_auto_loc_list = 1
+      let g:syntastic_loc_list_height = 5
+      let g:syntastic_auto_loc_list = 0
       let g:syntastic_check_on_open = 1
-      let g:syntastic_enable_signs = 1
       let g:syntastic_check_on_wq = 1
+      let g:syntastic_enable_signs = 1
       let b:syntastic_javascript_eslint_exec= StrTrim(system('npm-which eslint'))
       let g:syntastic_javascript_checkers = ['eslint']
-      let g:syntastic_mode_map = {'mode': 'active',
-            \ 'active_filetypes': ['javascript']}
+      "let g:syntastic_mode_map = {'mode': 'active',
+      "      \ 'active_filetypes': ['javascript']}
     "}}}
+    if has('nvim')
+      Neobundle 'benekastah/neomake' "{{{
+        let g:neomake_javascript_eslint_maker = {
+          \ 'args': ['--verbose'],
+          \ 'errorformat': '%A%f: line %l\, col %v\, %m \(%t%*\d\)',
+        \ }
+        let g:neomake_javascript_enabled_makers = ['eslint']
+      "}}}
+    endif
     NeoBundleLazy 'Shougo/vimshell.vim', {'autoload':{'commands':[ 'VimShell', 'VimShellInteractive' ]}} "{{{
       if s:is_macvim
         let g:vimshell_editor_command='mvim'
