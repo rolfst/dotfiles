@@ -63,35 +63,35 @@ snippet cons "inserts jsonable console.log" w
 console.log(${1:'%j',}$0); //eslint-disable-line no-console
 endsnippet
 
-snippet sinprom "sinon as promised with bluebird"
+snippet sinprom "sinon as promised with bluebird" b
 var Promise = require('bluebird');
 var sinonAsPromised = require('sinon-as-promised')(Promise); //eslint-disable-line no-unused-vars
 endsnippet
 
-snippet befo "before"
+snippet befo "before" b
 before(function ($1) {
 	$0
 });
 endsnippet
 
-snippet afte "after"
+snippet afte "after" b
 after(function ($1) {
 	$0
 });
 endsnippet
 
-snippet befoe "before"
+snippet befoe "before" b
 beforeEach(function ($1) {
 	$0
 });
 endsnippet
 
-snippet aftee "after"
+snippet aftee "after" b
 afterEach(function ($1) {
 	$0
 });
 endsnippet
 
-snippet lod "lodash"
+snippet lod "lodash" b
 var _ = require('lodash');
 endsnippet
