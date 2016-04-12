@@ -65,7 +65,7 @@ endsnippet
 
 snippet sinprom "sinon as promised with bluebird" b
 var Promise = require('bluebird');
-var sinonAsPromised = require('sinon-as-promised')(Promise); //eslint-disable-line no-unused-vars
+require('sinon-as-promised')(Promise);
 endsnippet
 
 snippet befo "before" b
@@ -95,3 +95,7 @@ endsnippet
 snippet lod "lodash" b
 var _ = require('lodash');
 endsnippet
+snippet emaxl "adds eslint disable max-lenght" b
+// eslint-disable-line max-length
+endsnippet
+
