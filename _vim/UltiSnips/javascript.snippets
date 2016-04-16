@@ -99,3 +99,19 @@ snippet emaxl "adds eslint disable max-lenght" b
 // eslint-disable-line max-length
 endsnippet
 
+
+snippet stubdep "stub dependency early in form of helper (testing, use as first require)" b
+'use strict';
+
+var sinon = require('sinon');
+var $1 = require('../../$2');
+var _ = require('lodash');
+var $3Stub = { call: _.noop };
+var $3FactoryStub = sinon.stub($1, '$0').returns($3Stub);
+
+after(function () {
+  $3FactoryStub.restore();
+});
+
+module.exports = $3Stub;
+endsnippet
