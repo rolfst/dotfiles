@@ -390,6 +390,7 @@ set timeoutlen=1500
     ""}}}
     NeoBundle 'wincent/ferret', { 'depends': 'tpope/vim-dispatch'} "{{{
     "}}}
+    NeoBundle 'wincent/vim-clipper'
     NeoBundle 'vim-ctrlspace/vim-ctrlspace' "{{{
       if executable("ag")
         let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
@@ -483,6 +484,7 @@ set timeoutlen=1500
     "}}}
     if exists('$TMUX')
       NeoBundle 'christoomey/vim-tmux-navigator'
+      NeoBundle 'wincent/terminus'
     endif
     NeoBundleLazy 'guns/xterm-color-table.vim', {'autoload':{'commands':'XtermColorTable'}}
     NeoBundle 'bufkill.vim'
@@ -817,6 +819,7 @@ function! VisualSearch(direction) range
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Cope
