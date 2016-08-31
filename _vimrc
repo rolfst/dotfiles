@@ -177,7 +177,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 \ 'build' : {
 \     'windows' : 'tools\\update-dll-mingw',
 \     'cygwin' : 'make -f make_cygwin.mak',
-\     'mac' : 'make',
+\     'mac' : 'make -f make_mac.mak',
 \     'linux' : 'make',
 \     'unix' : 'gmake',
 \    },
@@ -498,7 +498,7 @@ NeoBundle 'Shougo/vimproc.vim', {
       "      \ 'active_filetypes': ['javascript']}
     "}}}
     if has('nvim')
-      Neobundle 'benekastah/neomake' "{{{
+      NeoBundle 'benekastah/neomake' "{{{
         let g:neomake_javascript_eslint_maker = {
           \ 'args': ['--verbose'],
           \ 'errorformat': '%A%f: line %l\, col %v\, %m \(%t%*\d\)',
